@@ -1,0 +1,24 @@
+<HomeScreen>:
+    name: "home"
+    BoxLayout:
+        orientation: 'vertical'
+        spacing: 20
+        padding: 50
+
+        Label:
+            text: "Welcome to VitaCare"
+            font_size: 32
+            size_hint_y: None
+            height: 100
+
+        Button:
+            text: "I'm a Patient"
+            font_size: 24
+            on_release:
+                app.root.current = "patient_login"
+
+        Button:
+            text: "I'm a Doctor"
+            font_size: 24
+            on_release:
+                app.root.current = "doctor_login"

@@ -1,0 +1,153 @@
+<DoctorAddPrescriptionScreen>:
+    name: "doctor_add_prescription"
+    
+    # Background
+    FloatLayout:
+        canvas.before:
+            Color:
+                rgba: 0.95, 0.95, 0.98, 1  # Consistent light gray background
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+    BoxLayout:
+        orientation: 'vertical'
+        padding: dp(20)
+        spacing: dp(15)
+
+        # Header Section
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_y: 0.1
+            spacing: dp(10)
+            padding: [dp(10), dp(5), dp(10), dp(5)]
+
+            # Header with Title and Actions
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint_y: 1
+                padding: [dp(5), 0, dp(5), 0]
+                
+                MDIconButton:
+                    icon: "arrow-left"
+                    theme_text_color: "Custom"
+                    text_color: 0.1, 0.5, 0.8, 1
+                    pos_hint: {"x": 0, "center_y": 0.5}
+                    on_release: app.root.current = 'appointment_detail'
+
+                MDLabel:
+                    text: "Add Prescription"
+                    theme_text_color: "Custom"
+                    text_color: 0.1, 0.3, 0.6, 1
+                    font_style: "H5"
+                    bold: True
+                    halign: "center"
+                    size_hint_x: 0.8
+
+        # Main Content
+        ScrollView:
+            do_scroll_x: False
+            bar_width: dp(4)
+            bar_color: 0.1, 0.5, 0.8, 0.3
+            bar_inactive_color: 0.1, 0.5, 0.8, 0.1
+            effect_cls: "ScrollEffect"
+
+            BoxLayout:
+                orientation: 'vertical'
+                size_hint_y: None
+                height: self.minimum_height
+                spacing: dp(15)
+                padding: [dp(10), dp(10)]
+
+                # Form Card
+                MDCard:
+                    orientation: 'vertical'
+                    size_hint: None, None
+                    size: dp(400), dp(500)
+                    pos_hint: {"center_x": 0.5}
+                    elevation: 2
+                    padding: [dp(20), dp(20), dp(20), dp(20)]
+                    spacing: dp(16)
+                    md_bg_color: 1, 1, 1, 1
+                    radius: [dp(12),]
+
+                    MDLabel:
+                        text: "Medicine"
+                        theme_text_color: "Custom"
+                        text_color: 0.1, 0.3, 0.6, 1
+                        font_style: "Subtitle1"
+                        size_hint_y: None
+                        height: self.texture_size[1]
+                        padding: [0, 0, 0, dp(4)]
+                        
+                    MDTextField:
+                        id: medicine_input
+                        mode: "rectangle"
+                        hint_text: "Enter medicine name"
+                        line_color_normal: 0.8, 0.8, 0.8, 1
+                        line_color_focus: 0.1, 0.5, 0.8, 1
+                        line_anim: True
+                        size_hint_y: None
+                        height: dp(48)
+
+                    MDLabel:
+                        text: "Dosage"
+                        theme_text_color: "Custom"
+                        text_color: 0.1, 0.3, 0.6, 1
+                        font_style: "Subtitle1"
+                        size_hint_y: None
+                        height: self.texture_size[1]
+                        padding: [0, dp(8), 0, dp(4)]
+                        
+                    MDTextField:
+                        id: dosage_input
+                        mode: "rectangle"
+                        hint_text: "Enter dosage instructions"
+                        line_color_normal: 0.8, 0.8, 0.8, 1
+                        line_color_focus: 0.1, 0.5, 0.8, 1
+                        line_anim: True
+                        size_hint_y: None
+                        height: dp(48)
+
+                    MDLabel:
+                        text: "Notes (Optional)"
+                        theme_text_color: "Custom"
+                        text_color: 0.1, 0.3, 0.6, 1
+                        font_style: "Subtitle1"
+                        size_hint_y: None
+                        height: self.texture_size[1]
+                        padding: [0, dp(8), 0, dp(4)]
+                        
+                    MDTextField:
+                        id: notes_input
+                        mode: "rectangle"
+                        hint_text: "Additional notes..."
+                        line_color_normal: 0.8, 0.8, 0.8, 1
+                        line_color_focus: 0.1, 0.5, 0.8, 1
+                        line_anim: True
+                        multiline: True
+                        size_hint_y: None
+                        height: dp(100)
+
+                    BoxLayout:
+                        orientation: 'horizontal'
+                        size_hint_y: None
+                        height: dp(48)
+                        spacing: dp(10)
+                        padding: [0, dp(10), 0, 0]
+                        
+                        MDRaisedButton:
+                            text: "CANCEL"
+                            theme_text_color: "Custom"
+                            text_color: 1, 1, 1, 1
+                            md_bg_color: 0.8, 0.2, 0.2, 1
+                            size_hint_x: 0.4
+                            on_release: app.root.current = 'appointment_detail'
+                            
+                        MDRaisedButton:
+                            text: "SUBMIT"
+                            theme_text_color: "Custom"
+                            text_color: 1, 1, 1, 1
+                            md_bg_color: 0.1, 0.5, 0.8, 1
+                            size_hint_x: 0.6
+                            on_release: root.submit_prescription()

@@ -1,0 +1,356 @@
+<DoctorHomeScreen>:
+    name: 'doctor_home'
+    
+    # Background
+    FloatLayout:
+        canvas.before:
+            Color:
+                rgba: 0.95, 0.95, 0.98, 1  # Consistent light gray background
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+    BoxLayout:
+        orientation: 'vertical'
+        padding: dp(20)
+        spacing: dp(15)
+
+        # Header Section
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_y: 0.15
+            spacing: dp(10)
+            padding: [dp(10), dp(5), dp(10), dp(5)]
+
+            # Header with Title and Actions
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint_y: 1
+                padding: [dp(5), 0, dp(5), 0]
+                
+                MDIconButton:
+                    icon: "arrow-left"
+                    theme_text_color: "Custom"
+                    text_color: 0.1, 0.5, 0.8, 1
+                    pos_hint: {"x": 0, "center_y": 0.5}
+                    on_release: root.go_home()
+
+                MDLabel:
+                    text: "Doctor Dashboard"
+                    theme_text_color: "Custom"
+                    text_color: 0.1, 0.3, 0.6, 1
+                    font_style: "H5"
+                    bold: True
+                    halign: "center"
+                    size_hint_x: 0.8
+
+                MDIconButton:
+                    icon: "refresh"
+                    theme_text_color: "Custom"
+                    text_color: 0.1, 0.5, 0.8, 1
+                    pos_hint: {"right": 1, "center_y": 0.5}
+                    on_release: root.load_appointments()
+
+                MDIconButton:
+                    icon: "logout"
+                    theme_text_color: "Custom"
+                    text_color: 0.8, 0.2, 0.2, 1
+                    pos_hint: {"right": 1, "center_y": 0.5}
+                    on_release: root.show_logout_confirmation()
+
+        # Main Content
+        ScrollView:
+            do_scroll_x: False
+            do_scroll_y: True
+            bar_width: dp(4)
+            bar_color: 0.1, 0.5, 0.8, 0.3
+            bar_inactive_color: 0.1, 0.5, 0.8, 0.1
+            effect_cls: "ScrollEffect"
+
+            BoxLayout:
+                orientation: 'vertical'
+                size_hint_y: None
+                height: self.minimum_height
+                spacing: dp(15)
+                padding: [dp(10), dp(10), dp(10), dp(10)]
+
+                # Welcome Card
+                MDCard:
+                    orientation: 'vertical'
+                    size_hint: None, None
+                    size: dp(400), dp(120)
+                    pos_hint: {"center_x": 0.5}
+                    elevation: 2
+                    padding: [dp(20), dp(15), dp(20), dp(15)]
+                    spacing: dp(10)
+                    md_bg_color: 1, 1, 1, 1
+                    radius: [dp(12),]
+
+                    MDLabel:
+                        text: "Welcome, Doctor!"
+                        theme_text_color: "Custom"
+                        text_color: 0.1, 0.3, 0.6, 1
+                        font_style: "H5"
+                        bold: True
+                        size_hint_y: None
+                        height: self.texture_size[1]
+
+                    MDLabel:
+                        id: welcome_label
+                        text: "Manage your appointments and patient care"
+                        theme_text_color: "Secondary"
+                        font_style: "Body1"
+                        size_hint_y: None
+                        height: self.texture_size[1]
+
+                # Appointments Section
+                MDCard:
+                    id: appointments_card
+                    orientation: 'vertical'
+                    size_hint: None, None
+                    size: dp(400), dp(400)  # Increased height
+                    pos_hint: {"center_x": 0.5}
+                    elevation: 2
+                    padding: [dp(20), dp(20), dp(20), dp(20)]  # More padding
+                    spacing: dp(16)  # Increased spacing
+                    md_bg_color: 1, 1, 1, 1
+                    radius: [dp(12),]
+
+                    BoxLayout:
+                        orientation: 'horizontal'
+                        size_hint_y: None
+                        height: dp(40)
+                        spacing: dp(10)
+                        
+                        MDLabel:
+                            text: "Today's Appointments"
+                            theme_text_color: "Custom"
+                            text_color: 0.1, 0.3, 0.6, 1
+                            font_style: "H6"
+                            bold: True
+                            size_hint_x: 0.7
+                            size_hint_y: None
+                            height: self.texture_size[1]
+                            
+                        MDFlatButton:
+                            text: "View All"
+                            theme_text_color: "Custom"
+                            text_color: 0.1, 0.5, 0.8, 1
+                            size_hint_x: 0.3
+                            size_hint_y: None
+                            height: dp(36)
+                            pos_hint: {'center_y': 0.5}
+                            on_release: root.view_all_appointments()
+                            canvas.before:
+                                Color:
+                                    rgba: 0.1, 0.5, 0.8, 0.1
+                                RoundedRectangle:
+                                    size: self.size
+                                    pos: self.pos
+                                    radius: [dp(18),]
+
+                    MDBoxLayout:
+                        orientation: 'vertical'
+                        spacing: dp(12)
+                        size_hint_y: 0.9
+
+                        ScrollView:
+                            bar_width: dp(4)
+                            bar_color: 0.1, 0.5, 0.8, 0.3
+                            bar_inactive_color: 0.1, 0.5, 0.8, 0.1
+                            effect_cls: "ScrollEffect"
+
+                            BoxLayout:
+                                id: appointment_container
+                                orientation: 'vertical'
+                                size_hint_y: None
+                                height: self.minimum_height
+                                spacing: dp(12)  # Increased spacing between appointments
+                                padding: [dp(0), dp(4), dp(0), dp(8)]
+
+                                MDLabel:
+                                    text: "No appointments for today"
+                                    theme_text_color: "Secondary"
+                                    halign: 'center'
+                                    font_style: "Body1"
+                                    size_hint_y: None
+                                    height: dp(40)
+                                    padding: [dp(10), dp(10)]
+                                    canvas.before:
+                                        Color:
+                                            rgba: 0.95, 0.95, 0.98, 1
+                                        RoundedRectangle:
+                                            size: self.size
+                                            pos: self.pos
+                                            radius: [dp(8),]
+                                        Color:
+                                            rgba: 0.9, 0.9, 0.9, 1
+                                        Line:
+                                            rounded_rectangle: [self.x, self.y, self.width, self.height, dp(8)]
+                                            width: 1
+                                            dash_offset: 5
+                                            dash_length: 3
+
+                # Quick Actions
+                MDCard:
+                    orientation: 'vertical'
+                    size_hint: None, None
+                    size: dp(400), dp(240)  # Slightly taller to accommodate better spacing
+                    pos_hint: {"center_x": 0.5}
+                    elevation: 2
+                    padding: [dp(20), dp(20), dp(20), dp(20)]
+                    spacing: dp(16)
+                    md_bg_color: 1, 1, 1, 1
+                    radius: [dp(12),]
+
+                    MDLabel:
+                        text: "Quick Actions"
+                        theme_text_color: "Custom"
+                        text_color: 0.1, 0.3, 0.6, 1
+                        font_style: "H6"
+                        bold: True
+                        size_hint_y: None
+                        height: self.texture_size[1]
+
+                    # First row of buttons
+                    BoxLayout:
+                        orientation: 'horizontal'
+                        spacing: dp(12)
+                        size_hint_y: None
+                        height: dp(56)  # Slightly taller buttons
+
+                        MDRaisedButton:
+                            id: view_appts_btn
+                            text: "View All"
+                            size_hint_x: 0.5
+                            size_hint_y: 1
+                            elevation: 0
+                            md_bg_color: 0.1, 0.5, 0.8, 1
+                            theme_text_color: "Custom"
+                            text_color: 1, 1, 1, 1
+                            on_release: root.view_all_appointments()
+                            canvas.before:
+                                RoundedRectangle:
+                                    size: self.size
+                                    pos: self.pos
+                                    radius: [dp(8),]
+
+                        MDRaisedButton:
+                            id: add_consult_btn
+                            text: "Add Consult"
+                            size_hint_x: 0.5
+                            size_hint_y: 1
+                            elevation: 0
+                            md_bg_color: 0.2, 0.6, 0.9, 1
+                            theme_text_color: "Custom"
+                            text_color: 1, 1, 1, 1
+                            on_release: root.add_consultation()
+                            canvas.before:
+                                RoundedRectangle:
+                                    size: self.size
+                                    pos: self.pos
+                                    radius: [dp(8),]
+
+                    # Second row of buttons
+                    BoxLayout:
+                        orientation: 'horizontal'
+                        spacing: dp(12)
+                        size_hint_y: None
+                        height: dp(56)  # Slightly taller buttons
+
+                        MDRaisedButton:
+                            id: add_prescription_btn
+                            text: "Prescription"
+                            size_hint_x: 0.5
+                            size_hint_y: 1
+                            elevation: 0
+                            md_bg_color: 0.3, 0.7, 1.0, 1
+                            theme_text_color: "Custom"
+                            text_color: 1, 1, 1, 1
+                            on_release: root.add_prescription()
+                            canvas.before:
+                                RoundedRectangle:
+                                    size: self.size
+                                    pos: self.pos
+                                    radius: [dp(8),]
+
+                        MDRaisedButton:
+                            id: patient_records_btn
+                            text: "Records"
+                            size_hint_x: 0.5
+                            size_hint_y: 1
+                            elevation: 0
+                            md_bg_color: 0.4, 0.8, 1.0, 1
+                            theme_text_color: "Custom"
+                            text_color: 1, 1, 1, 1
+                            on_release: root.view_patient_records()
+                            canvas.before:
+                                RoundedRectangle:
+                                    size: self.size
+                                    pos: self.pos
+                                    radius: [dp(8),]
+
+                        MDRaisedButton:
+                            id: chat_btn
+                            text: "Chat"
+                            size_hint_x: 0.5
+                            size_hint_y: 1
+                            elevation: 0
+                            md_bg_color: 0.6, 0.2, 0.8, 1
+                            theme_text_color: "Custom"
+                            text_color: 1, 1, 1, 1
+                            on_release: root.chat_with_patient()
+                            canvas.before:
+                                RoundedRectangle:
+                                    size: self.size
+                                    pos: self.pos
+                                    radius: [dp(8),]
+
+                # Statistics Card
+                MDCard:
+                    orientation: 'vertical'
+                    size_hint: None, None
+                    size: dp(400), dp(120)
+                    pos_hint: {"center_x": 0.5}
+                    elevation: 2
+                    radius: [dp(12),]
+                    padding: [dp(15), dp(10), dp(15), dp(10)]
+                    padding: dp(20)
+                    spacing: dp(10)
+                    md_bg_color: 1, 1, 1, 1
+
+                    MDLabel:
+                        text: "Today's Overview"
+                        theme_text_color: "Custom"
+                        text_color: 0.1, 0.3, 0.6, 1
+                        font_style: "H6"
+                        bold: True
+                        halign: "center"
+                        size_hint_y: None
+                        height: self.texture_size[1]
+
+                    MDLabel:
+                        text: "5 appointments scheduled • 3 patient records updated"
+                        theme_text_color: "Secondary"
+                        halign: "center"
+                        font_style: "Body2"
+                        size_hint_y: None
+                        height: self.texture_size[1]
+
+        # Footer
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_y: 0.15
+            spacing: dp(5)
+
+            MDLabel:
+                text: "VitaCare Doctor Portal"
+                theme_text_color: "Secondary"
+                font_style: "Caption"
+                halign: "center"
+
+            MDLabel:
+                text: "Professional Healthcare Excellence"
+                theme_text_color: "Secondary"
+                font_style: "Overline"
+                halign: "center"

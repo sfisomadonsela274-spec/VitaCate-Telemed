@@ -1,0 +1,223 @@
+<BookAppointmentScreen>:
+    name: 'book_appointment'
+    
+    BoxLayout:
+        orientation: 'vertical'
+        padding: dp(20)
+        spacing: dp(15)
+        canvas.before:
+            Color:
+                rgba: 0.95, 0.95, 0.98, 1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+        # Header
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint_y: None
+            height: dp(50)
+            spacing: dp(10)
+
+            MDIconButton:
+                id: back_button
+                icon: "arrow-left"
+                theme_text_color: "Custom"
+                text_color: 0.1, 0.5, 0.8, 1
+                on_release: root.show_back_confirmation()
+
+            MDLabel:
+                text: "Book Appointment"
+                theme_text_color: "Custom"
+                text_color: 0.1, 0.3, 0.6, 1
+                font_style: "H5"
+                bold: True
+                halign: "left"
+
+        # Status Label
+        MDLabel:
+            id: appointment_status
+            text: "Check or book an appointment"
+            theme_text_color: "Secondary"
+            font_style: "Subtitle1"
+            size_hint_y: None
+            height: dp(40)
+            halign: "center"
+
+        # Appointment Details Card
+        MDCard:
+            orientation: 'vertical'
+            size_hint_y: None
+            height: dp(400)
+            elevation: 4
+            padding: dp(20)
+            spacing: dp(15)
+            md_bg_color: 1, 1, 1, 1
+
+            MDLabel:
+                text: "Appointment Details"
+                theme_text_color: "Custom"
+                text_color: 0.1, 0.3, 0.6, 1
+                font_style: "H6"
+                bold: True
+                size_hint_y: None
+                height: dp(30)
+
+            # Doctor Email
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint_y: None
+                height: dp(60)
+                spacing: dp(10)
+
+                MDIcon:
+                    icon: "doctor"
+                    theme_text_color: "Custom"
+                    text_color: 0.1, 0.5, 0.8, 1
+                    size_hint_x: 0.2
+
+                MDTextField:
+                    id: doctor_email
+                    hint_text: "Doctor Email (e.g. doctor1@clinic.com)"
+                    mode: "rectangle"
+                    size_hint_x: 0.8
+                    icon_left: ""
+                    text_color: 0.1, 0.1, 0.1, 1
+                    line_color_focus: 0.1, 0.5, 0.8, 1
+
+            # Date Input
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint_y: None
+                height: dp(60)
+                spacing: dp(10)
+
+                MDIcon:
+                    icon: "calendar"
+                    theme_text_color: "Custom"
+                    text_color: 0.1, 0.5, 0.8, 1
+                    size_hint_x: 0.2
+
+                MDTextField:
+                    id: date_input
+                    hint_text: "Preferred Date (YYYY-MM-DD) - Leave blank for auto-select"
+                    mode: "rectangle"
+                    size_hint_x: 0.8
+                    text_color: 0.1, 0.1, 0.1, 1
+                    line_color_focus: 0.1, 0.5, 0.8, 1
+
+            # Time Input
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint_y: None
+                height: dp(60)
+                spacing: dp(10)
+
+                MDIcon:
+                    icon: "clock"
+                    theme_text_color: "Custom"
+                    text_color: 0.1, 0.5, 0.8, 1
+                    size_hint_x: 0.2
+
+                MDTextField:
+                    id: time_input
+                    hint_text: "Preferred Time (HH:MM:SS) - Leave blank for auto-select"
+                    mode: "rectangle"
+                    size_hint_x: 0.8
+                    text_color: 0.1, 0.1, 0.1, 1
+                    line_color_focus: 0.1, 0.5, 0.8, 1
+
+            # Reason Input
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint_y: None
+                height: dp(80)
+                spacing: dp(10)
+
+                MDIcon:
+                    icon: "note-text"
+                    theme_text_color: "Custom"
+                    text_color: 0.1, 0.5, 0.8, 1
+                    size_hint_x: 0.2
+
+                MDTextField:
+                    id: reason_input
+                    hint_text: "Reason for Visit (e.g. Regular Check-up)"
+                    mode: "rectangle"
+                    size_hint_x: 0.8
+                    multiline: True
+                    text_color: 0.1, 0.1, 0.1, 1
+                    line_color_focus: 0.1, 0.5, 0.8, 1
+
+        # Payment Information Card
+        MDCard:
+            orientation: 'vertical'
+            size_hint_y: None
+            height: dp(150)
+            elevation: 4
+            padding: dp(20)
+            spacing: dp(10)
+            md_bg_color: 1, 1, 1, 1
+
+            MDLabel:
+                text: "Payment Information"
+                theme_text_color: "Custom"
+                text_color: 0.1, 0.3, 0.6, 1
+                font_style: "H6"
+                bold: True
+                size_hint_y: None
+                height: dp(30)
+
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint_y: None
+                height: dp(40)
+
+                MDIcon:
+                    icon: "credit-card"
+                    theme_text_color: "Custom"
+                    text_color: 0.2, 0.7, 0.3, 1
+
+                MDLabel:
+                    text: "Secure Payment: $20.00"
+                    theme_text_color: "Custom"
+                    text_color: 0.2, 0.7, 0.3, 1
+                    font_style: "Subtitle1"
+                    bold: True
+
+            MDLabel:
+                text: "Payment processed securely via Stripe"
+                theme_text_color: "Secondary"
+                font_style: "Caption"
+                size_hint_y: None
+                height: dp(20)
+
+        # Action Buttons
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_y: None
+            height: dp(120)
+            spacing: dp(10)
+
+            MDRaisedButton:
+                id: book_button
+                text: "  Book Appointment & Pay"
+                md_bg_color: 0.1, 0.5, 0.8, 1
+                theme_text_color: "Custom"
+                text_color: 1, 1, 1, 1
+                size_hint_y: None
+                height: dp(50)
+                font_style: "Button"
+                bold: True
+                elevation: 4
+                on_release: root.book_appointment()
+                padding: dp(16), 0
+
+
+            MDFlatButton:
+                text: "  Go Back to Dashboard"
+                theme_text_color: "Custom"
+                text_color: 0.5, 0.5, 0.5, 1
+                size_hint_y: None
+                height: dp(40)
+                on_release: app.root.current = 'patient_home'

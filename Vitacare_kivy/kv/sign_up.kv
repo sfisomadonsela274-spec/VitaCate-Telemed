@@ -1,0 +1,274 @@
+<SignUpScreen>:
+    name: "sign_up"
+    
+    # Background Image
+    FloatLayout:
+        canvas.before:
+            Color:
+                rgba: 0.95, 0.95, 0.98, 1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+    BoxLayout:
+        orientation: 'vertical'
+        padding: dp(20)
+        spacing: dp(20)
+
+        # Header Section
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_y: 0.25
+            spacing: dp(10)
+            padding: dp(10)
+
+            # Sign Up Icon and Title
+            FloatLayout:
+                size_hint_y: 0.6
+                
+                MDIconButton:
+                    icon: "arrow-left"
+                    theme_text_color: "Custom"
+                    text_color: 0.1, 0.5, 0.8, 1
+                    pos_hint: {"x": 0, "center_y": 0.5}
+                    on_release: root.on_back_press()
+
+                MDIcon:
+                    icon: "account-plus"
+                    theme_text_color: "Custom"
+                    text_color: 0.1, 0.5, 0.8, 1
+                    font_size: "64sp"
+                    pos_hint: {"center_x": 0.5, "center_y": 0.5}
+
+            MDLabel:
+                text: "Create Account"
+                theme_text_color: "Custom"
+                text_color: 0.1, 0.3, 0.6, 1
+                font_style: "H4"
+                bold: True
+                halign: "center"
+                size_hint_y: 0.3
+
+            MDLabel:
+                text: "Join VitaCare for better healthcare"
+                theme_text_color: "Secondary"
+                halign: "center"
+                font_style: "Body1"
+                size_hint_y: 0.2
+
+        # Sign Up Card
+        MDCard:
+            orientation: 'vertical'
+            size_hint: None, None
+            size: dp(380), dp(600)
+            pos_hint: {"center_x": 0.5, "center_y": 0.5}
+            elevation: 8
+            padding: dp(25)
+            spacing: dp(15)
+            md_bg_color: 1, 1, 1, 1
+
+            ScrollView:
+                do_scroll_x: False
+                do_scroll_y: True
+
+                BoxLayout:
+                    orientation: 'vertical'
+                    size_hint_y: None
+                    height: self.minimum_height
+                    spacing: dp(15)
+
+                    # Email Field
+                    BoxLayout:
+                        orientation: 'horizontal'
+                        size_hint_y: None
+                        height: dp(56)
+                        spacing: dp(10)
+
+                        MDIcon:
+                            icon: "email"
+                            theme_text_color: "Custom"
+                            text_color: 0.1, 0.5, 0.8, 1
+                            size_hint_x: 0.2
+
+                        MDTextField:
+                            id: email_input
+                            hint_text: "Email Address"
+                            mode: "rectangle"
+                            size_hint_x: 0.8
+                            icon_left: ""
+                            text_color: 0.1, 0.1, 0.1, 1
+                            line_color_focus: 0.1, 0.5, 0.8, 1
+
+                    # First Name Field
+                    BoxLayout:
+                        orientation: 'horizontal'
+                        size_hint_y: None
+                        height: dp(56)
+                        spacing: dp(10)
+
+                        MDIcon:
+                            icon: "account"
+                            theme_text_color: "Custom"
+                            text_color: 0.1, 0.5, 0.8, 1
+                            size_hint_x: 0.2
+
+                        MDTextField:
+                            id: first_name_input
+                            hint_text: "First Name"
+                            mode: "rectangle"
+                            size_hint_x: 0.8
+                            icon_left: ""
+                            text_color: 0.1, 0.1, 0.1, 1
+                            line_color_focus: 0.1, 0.5, 0.8, 1
+
+                    # Last Name Field
+                    BoxLayout:
+                        orientation: 'horizontal'
+                        size_hint_y: None
+                        height: dp(56)
+                        spacing: dp(10)
+
+                        MDIcon:
+                            icon: "account"
+                            theme_text_color: "Custom"
+                            text_color: 0.1, 0.5, 0.8, 1
+                            size_hint_x: 0.2
+
+                        MDTextField:
+                            id: last_name_input
+                            hint_text: "Last Name"
+                            mode: "rectangle"
+                            size_hint_x: 0.8
+                            icon_left: ""
+                            text_color: 0.1, 0.1, 0.1, 1
+                            line_color_focus: 0.1, 0.5, 0.8, 1
+
+                    # Phone Field
+                    BoxLayout:
+                        orientation: 'horizontal'
+                        size_hint_y: None
+                        height: dp(56)
+                        spacing: dp(10)
+
+                        MDIcon:
+                            icon: "phone"
+                            theme_text_color: "Custom"
+                            text_color: 0.1, 0.5, 0.8, 1
+                            size_hint_x: 0.2
+
+                        MDTextField:
+                            id: phone_input
+                            hint_text: "Phone Number"
+                            mode: "rectangle"
+                            size_hint_x: 0.8
+                            icon_left: ""
+                            text_color: 0.1, 0.1, 0.1, 1
+                            line_color_focus: 0.1, 0.5, 0.8, 1
+
+                    # Address Field
+                    BoxLayout:
+                        orientation: 'horizontal'
+                        size_hint_y: None
+                        height: dp(56)
+                        spacing: dp(10)
+
+                        MDIcon:
+                            icon: "home"
+                            theme_text_color: "Custom"
+                            text_color: 0.1, 0.5, 0.8, 1
+                            size_hint_x: 0.2
+
+                        MDTextField:
+                            id: address_input
+                            hint_text: "Address"
+                            mode: "rectangle"
+                            size_hint_x: 0.8
+                            icon_left: ""
+                            text_color: 0.1, 0.1, 0.1, 1
+                            line_color_focus: 0.1, 0.5, 0.8, 1
+
+                    # Password Field
+                    BoxLayout:
+                        orientation: 'horizontal'
+                        size_hint_y: None
+                        height: dp(56)
+                        spacing: dp(10)
+
+                        MDIcon:
+                            icon: "lock"
+                            theme_text_color: "Custom"
+                            text_color: 0.1, 0.5, 0.8, 1
+                            size_hint_x: 0.2
+
+                        MDTextField:
+                            id: password_input
+                            hint_text: "Password"
+                            mode: "rectangle"
+                            size_hint_x: 0.8
+                            password: True
+                            text_color: 0.1, 0.1, 0.1, 1
+                            line_color_focus: 0.1, 0.5, 0.8, 1
+
+                    # Confirm Password Field
+                    BoxLayout:
+                        orientation: 'horizontal'
+                        size_hint_y: None
+                        height: dp(56)
+                        spacing: dp(10)
+
+                        MDIcon:
+                            icon: "lock-check"
+                            theme_text_color: "Custom"
+                            text_color: 0.1, 0.5, 0.8, 1
+                            size_hint_x: 0.2
+
+                        MDTextField:
+                            id: confirm_password_input
+                            hint_text: "Confirm Password"
+                            mode: "rectangle"
+                            size_hint_x: 0.8
+                            password: True
+                            text_color: 0.1, 0.1, 0.1, 1
+                            line_color_focus: 0.1, 0.5, 0.8, 1
+
+            # Register Button
+            MDRaisedButton:
+                text: "Create Account"
+                md_bg_color: 0.1, 0.5, 0.8, 1
+                theme_text_color: "Custom"
+                text_color: 1, 1, 1, 1
+                size_hint_y: None
+                height: dp(50)
+                font_style: "Button"
+                bold: True
+                elevation: 4
+                on_release: root.sign_up()
+
+            # Login Link
+            MDTextButton:
+                text: "Already have an account? Login"
+                theme_text_color: "Custom"
+                text_color: 0.1, 0.5, 0.8, 1
+                font_style: "Caption"
+                halign: "center"
+                size_hint_y: None
+                height: dp(30)
+                on_release: root.manager.current = "patient_login"
+
+        # Footer
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_y: 0.1
+            spacing: dp(5)
+
+            MDLabel:
+                text: "VitaCare Medical Systems"
+                theme_text_color: "Secondary"
+                font_style: "Caption"
+                halign: "center"
+
+            MDLabel:
+                text: "Secure • Reliable • Caring"
+                theme_text_color: "Secondary"
+                font_style: "Overline"
+                halign: "center"

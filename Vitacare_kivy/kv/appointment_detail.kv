@@ -1,0 +1,145 @@
+<AppointmentDetailScreen>:
+    name: 'appointment_detail'
+    
+    # Background
+    FloatLayout:
+        canvas.before:
+            Color:
+                rgba: 0.95, 0.95, 0.98, 1  # Light gray background
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+    BoxLayout:
+        orientation: 'vertical'
+        padding: dp(20)
+        spacing: dp(15)
+
+        # Header Section
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_y: 0.1
+            spacing: dp(10)
+            padding: [dp(10), dp(5), dp(10), dp(5)]
+
+            # Header with Title and Actions
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint_y: 1
+                padding: [dp(5), 0, dp(5), 0]
+                
+                MDIconButton:
+                    icon: "arrow-left"
+                    theme_text_color: "Custom"
+                    text_color: 0.1, 0.5, 0.8, 1
+                    pos_hint: {"x": 0, "center_y": 0.5}
+                    on_release: app.root.current = 'doctor_view_appointments'
+
+                MDLabel:
+                    text: "Appointment Details"
+                    theme_text_color: "Custom"
+                    text_color: 0.1, 0.3, 0.6, 1
+                    font_style: "H5"
+                    bold: True
+                    halign: "center"
+                    size_hint_x: 0.8
+
+        # Main Content
+        ScrollView:
+            do_scroll_x: False
+            bar_width: dp(4)
+            bar_color: 0.1, 0.5, 0.8, 0.3
+            bar_inactive_color: 0.1, 0.5, 0.8, 0.1
+            effect_cls: "ScrollEffect"
+
+            BoxLayout:
+                orientation: 'vertical'
+                size_hint_y: None
+                height: self.minimum_height
+                spacing: dp(15)
+                padding: [dp(10), dp(10)]
+
+                # Appointment Details Card
+                MDCard:
+                    orientation: 'vertical'
+                    size_hint: None, None
+                    size: dp(400), dp(200)
+                    pos_hint: {"center_x": 0.5}
+                    elevation: 2
+                    padding: [dp(20), dp(20)]
+                    spacing: dp(12)
+                    md_bg_color: 1, 1, 1, 1
+                    radius: [dp(12),]
+
+                    MDLabel:
+                        id: detail_label
+                        text: "Loading appointment details..."
+                        theme_text_color: "Custom"
+                        text_color: 0.1, 0.3, 0.6, 1
+                        font_style: "Body1"
+                        size_hint_y: None
+                        height: self.texture_size[1]
+                        valign: 'top'
+
+                # Action Buttons Card
+                MDCard:
+                    orientation: 'vertical'
+                    size_hint: None, None
+                    size: dp(400), dp(200)
+                    pos_hint: {"center_x": 0.5}
+                    elevation: 2
+                    padding: [dp(20), dp(20)]
+                    spacing: dp(12)
+                    md_bg_color: 1, 1, 1, 1
+                    radius: [dp(12),]
+
+                    # First Row of Buttons
+                    BoxLayout:
+                        orientation: 'horizontal'
+                        size_hint_y: None
+                        height: dp(48)
+                        spacing: dp(10)
+                        
+                        MDRaisedButton:
+                            text: "Complete"
+                            size_hint_x: 0.5
+                            md_bg_color: 0.2, 0.7, 0.3, 1
+                            on_release: root.mark_complete()
+                            
+                        MDRaisedButton:
+                            text: "Add Prescription"
+                            size_hint_x: 0.5
+                            md_bg_color: 0.1, 0.5, 0.8, 1
+                            on_release: root.add_prescription()
+
+                    # Second Row of Buttons
+                    BoxLayout:
+                        orientation: 'horizontal'
+                        size_hint_y: None
+                        height: dp(48)
+                        spacing: dp(10)
+                        
+                        MDRaisedButton:
+                            text: "Add Consultation"
+                            size_hint_x: 0.5
+                            md_bg_color: 0.1, 0.5, 0.8, 1
+                            on_release: root.add_consultation()
+                            
+                        MDRaisedButton:
+                            text: "Chat"
+                            size_hint_x: 0.5
+                            md_bg_color: 0.6, 0.2, 0.8, 1
+                            on_release: root.start_chat()
+
+                    # Third Row of Buttons
+                    BoxLayout:
+                        orientation: 'horizontal'
+                        size_hint_y: None
+                        height: dp(48)
+                        spacing: dp(10)
+                        
+                        MDRaisedButton:
+                            text: "Video Call"
+                            size_hint_x: 1.0
+                            md_bg_color: 0.8, 0.2, 0.2, 1
+                            on_release: root.manager.current = 'video_call'

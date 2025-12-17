@@ -1,0 +1,191 @@
+<PatientLoginScreen>:
+    name: "patient_login"
+
+    # Background Image
+    FloatLayout:
+        canvas.before:
+            Color:
+                rgba: 0.95, 0.95, 0.98, 1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+            # You can add a background image here
+            # Image:
+            #     source: "assets/medical_background.jpg"
+            #     pos: self.pos
+            #     size: self.size
+
+    BoxLayout:
+        orientation: 'vertical'
+        padding: dp(20)
+        spacing: dp(20)
+
+        # Header Section
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_y: 0.3
+            spacing: dp(10)
+            padding: dp(10)
+
+            # Patient Icon and Title
+            FloatLayout:
+                size_hint_y: 0.6
+
+                MDIconButton:
+                    icon: "arrow-left"
+                    theme_text_color: "Custom"
+                    text_color: 0.1, 0.5, 0.8, 1
+                    pos_hint: {"x": 0, "center_y": 0.5}
+                    on_release: root.on_back_press()
+
+                MDIcon:
+                    icon: "account"
+                    theme_text_color: "Custom"
+                    text_color: 0.1, 0.5, 0.8, 1
+                    font_size: "64sp"
+                    pos_hint: {"center_x": 0.5, "center_y": 0.5}
+
+            MDLabel:
+                text: "Patient Portal"
+                theme_text_color: "Custom"
+                text_color: 0.1, 0.3, 0.6, 1
+                font_style: "H4"
+                bold: True
+                halign: "center"
+                size_hint_y: 0.3
+
+            MDLabel:
+                text: "Secure access to your health dashboard"
+                theme_text_color: "Secondary"
+                halign: "center"
+                font_style: "Body1"
+                size_hint_y: 0.2
+
+        # Login Card
+        MDCard:
+            orientation: 'vertical'
+            size_hint: None, None
+            size: dp(350), dp(450)
+            pos_hint: {"center_x": 0.5, "center_y": 0.5}
+            elevation: 8
+            padding: dp(25)
+            spacing: dp(20)
+            md_bg_color: 1, 1, 1, 1
+
+            MDLabel:
+                text: "Login to Your Account"
+                theme_text_color: "Custom"
+                text_color: 0.1, 0.3, 0.6, 1
+                font_style: "H5"
+                bold: True
+                halign: "center"
+                size_hint_y: None
+                height: self.texture_size[1]
+
+            # Email Field
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint_y: None
+                height: dp(56)
+                spacing: dp(10)
+
+                MDIcon:
+                    icon: "email"
+                    theme_text_color: "Custom"
+                    text_color: 0.1, 0.5, 0.8, 1
+                    size_hint_x: 0.2
+
+                MDTextField:
+                    id: email_input
+                    hint_text: "Email Address"
+                    mode: "rectangle"
+                    size_hint_x: 0.8
+                    icon_left: ""
+                    text_color: 0.1, 0.1, 0.1, 1
+                    line_color_focus: 0.1, 0.5, 0.8, 1
+                    on_text_validate: password_input.focus = True
+
+            # Password Field
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint_y: None
+                height: dp(56)
+                spacing: dp(10)
+
+                MDIcon:
+                    icon: "lock"
+                    theme_text_color: "Custom"
+                    text_color: 0.1, 0.5, 0.8, 1
+                    size_hint_x: 0.15
+
+                MDTextField:
+                    id: password_input
+                    hint_text: "Password"
+                    mode: "rectangle"
+                    size_hint_x: 0.7
+                    password: True
+                    text_color: 0.1, 0.1, 0.1, 1
+                    line_color_focus: 0.1, 0.5, 0.8, 1
+                    on_text_validate: login_button.trigger_action()
+
+                MDIconButton:
+                    icon: "eye-off"
+                    size_hint_x: 0.15
+                    pos_hint: {"center_y": 0.5}
+                    on_release:
+                        password_input.password = not password_input.password
+                        self.icon = "eye" if not password_input.password else "eye-off"
+
+            # Forgot Password Link
+            MDTextButton:
+                text: "Forgot Password?"
+                theme_text_color: "Custom"
+                text_color: 0.1, 0.5, 0.8, 1
+                font_style: "Caption"
+                halign: "right"
+                size_hint_y: None
+                height: dp(30)
+                on_release: app.root.current = "forgot_password_email"
+
+            # Login Button
+            MDRaisedButton:
+                id: login_button
+                text: "Login"
+                md_bg_color: 0.1, 0.5, 0.8, 1
+                theme_text_color: "Custom"
+                text_color: 1, 1, 1, 1
+                size_hint_y: None
+                height: dp(50)
+                font_style: "Button"
+                bold: True
+                elevation: 4
+                on_release: root.login_user()
+
+            # Sign Up Button
+            MDTextButton:
+                text: "Don't have an account? Sign Up"
+                theme_text_color: "Custom"
+                text_color: 0.1, 0.5, 0.8, 1
+                font_style: "Caption"
+                halign: "center"
+                size_hint_y: None
+                height: dp(30)
+                on_release: app.root.current = "sign_up"
+
+        # Footer
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_y: 0.15
+            spacing: dp(5)
+
+            MDLabel:
+                text: "VitaCare Medical Systems"
+                theme_text_color: "Secondary"
+                font_style: "Caption"
+                halign: "center"
+
+            MDLabel:
+                text: "Secure • Reliable • Caring"
+                theme_text_color: "Secondary"
+                font_style: "Overline"
+                halign: "center"

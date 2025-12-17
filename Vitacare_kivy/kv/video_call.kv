@@ -1,0 +1,166 @@
+#:import dp kivy.metrics.dp
+#:import MDIconButton kivymd.uix.button.MDIconButton
+#:import IconLeftWidget kivymd.uix.list.IconLeftWidget
+#:import OneLineIconListItem kivymd.uix.list.OneLineIconListItem
+
+<VideoCallScreen>:
+    name: "video_call"
+
+    FloatLayout:
+        canvas.before:
+            Color:
+                rgba: 0.95, 0.95, 0.98, 1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+    BoxLayout:
+        orientation: 'vertical'
+        padding: dp(20)
+        spacing: dp(15)
+
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint_y: None
+            height: dp(56)
+            padding: [dp(4), 0]
+
+            MDIconButton:
+                icon: 'arrow-left'
+                theme_text_color: 'Custom'
+                text_color: 0.1, 0.5, 0.8, 1
+                pos_hint: {'center_y': 0.5}
+                on_release: app.root.current = getattr(app.root, 'video_previous', 'appointment_detail')
+
+            MDLabel:
+                text: 'Video Call'
+                font_style: 'H5'
+                theme_text_color: 'Custom'
+                text_color: 0.1, 0.3, 0.6, 1
+                bold: True
+                halign: 'center'
+                valign: 'middle'
+
+            Widget:
+                size_hint_x: None
+                width: dp(48)
+
+        ScrollView:
+            do_scroll_x: False
+            bar_width: 0
+
+            AnchorLayout:
+                anchor_x: 'center'
+                anchor_y: 'top'
+                padding: 0, dp(24), 0, dp(36)
+
+                MDCard:
+                    orientation: 'vertical'
+                    size_hint: None, None
+                    width: min(dp(520), root.width - dp(40))
+                    adaptive_height: True
+                    elevation: 4
+                    radius: [dp(18),]
+                    md_bg_color: 1, 1, 1, 1
+                    padding: [dp(28), dp(32), dp(28), dp(32)]
+                    spacing: dp(24)
+
+                    MDBoxLayout:
+                        orientation: 'vertical'
+                        adaptive_height: True
+                        spacing: dp(16)
+
+                        MDCard:
+                            size_hint: None, None
+                            size: dp(64), dp(64)
+                            radius: [dp(24),]
+                            md_bg_color: 0.1, 0.5, 0.8, 0.12
+                            elevation: 0
+                            pos_hint: {'center_x': 0.5}
+
+                            MDIcon:
+                                icon: 'video'
+                                theme_text_color: 'Custom'
+                                text_color: 0.1, 0.5, 0.8, 1
+                                font_size: '32sp'
+                                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+
+                        MDLabel:
+                            text: 'Launch your secure consultation'
+                            font_style: 'H5'
+                            halign: 'center'
+                            theme_text_color: 'Custom'
+                            text_color: 0.1, 0.3, 0.6, 1
+
+                        MDLabel:
+                            text: 'We will open a private Jitsi meeting room in your default browser so you can meet face-to-face.'
+                            font_style: 'Body1'
+                            theme_text_color: 'Secondary'
+                            halign: 'center'
+                            size_hint_y: None
+                            height: self.texture_size[1]
+
+                    Widget:
+                        size_hint_y: None
+                        height: dp(1)
+                        canvas.before:
+                            Color:
+                                rgba: 0.9, 0.92, 0.96, 1
+                            Rectangle:
+                                size: self.size
+                                pos: self.pos
+
+                    MDList:
+                        size_hint_y: None
+                        height: self.minimum_height
+
+                        OneLineIconListItem:
+                            text: 'Join at the scheduled appointment time for the smoothest start.'
+                            theme_text_color: 'Secondary'
+
+                            IconLeftWidget:
+                                icon: 'clock-outline'
+                                theme_text_color: 'Custom'
+                                text_color: 0.1, 0.5, 0.8, 1
+
+                        OneLineIconListItem:
+                            text: 'Choose a quiet space and use headphones if possible for clear audio.'
+                            theme_text_color: 'Secondary'
+
+                            IconLeftWidget:
+                                icon: 'headset'
+                                theme_text_color: 'Custom'
+                                text_color: 0.1, 0.5, 0.8, 1
+
+                        OneLineIconListItem:
+                            text: 'Stay connected to a stable internet network throughout the session.'
+                            theme_text_color: 'Secondary'
+
+                            IconLeftWidget:
+                                icon: 'wifi'
+                                theme_text_color: 'Custom'
+                                text_color: 0.1, 0.5, 0.8, 1
+
+                    MDBoxLayout:
+                        orientation: 'vertical'
+                        adaptive_height: True
+                        spacing: dp(12)
+
+                        MDRaisedButton:
+                            text: 'Start Video Call'
+                            icon: 'video-check'
+                            md_bg_color: 0.1, 0.5, 0.8, 1
+                            size_hint: None, None
+                            size: min(root.width - dp(80), dp(280)), dp(48)
+                            pos_hint: {'center_x': 0.5}
+                            on_release: root.start_call()
+
+                        MDLabel:
+                            text: 'Keep this window open so you can return once the call finishes.'
+                            font_style: 'Caption'
+                            theme_text_color: 'Hint'
+                            halign: 'center'
+                            size_hint_y: None
+                            text_size: self.width, None
+                            height: self.texture_size[1]
+
