@@ -10,7 +10,7 @@ class BookAppointmentScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         # Initialize Stripe with your existing API key
-        stripe.api_key = "sk_test_51RnZUeFfw2n197YweVuQb94gG90ov7U7TodTKNu7Vvy9wWjULhXq1a3RRHPnVZ4jGyBgsGw8DXBKzSKgxYigb1NZ00ETSnYLC5"
+        stripe.api_key = ""
 
     def show_popup(self, message):
         popup = Popup(title="Appointment Info",
