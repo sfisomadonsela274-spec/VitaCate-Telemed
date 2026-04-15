@@ -240,7 +240,7 @@ export class PatientLoginComponent {
     this.isLoading = true; this.errorMessage = '';
     this.auth.patientLogin(this.email, this.password).subscribe({
       next: () => { this.isLoading = false; this.router.navigate(['/patient-home']); },
-      error: (err) => { this.isLoading = false; this.errorMessage = err?.error?.detail || 'Invalid credentials. Please try again.'; }
+      error: (err: any) => { this.isLoading = false; this.errorMessage = err?.error?.detail || 'Invalid credentials. Please try again.'; }
     });
   }
 }

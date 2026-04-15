@@ -202,7 +202,7 @@ export class SignupComponent {
         this.isLoading = false;
         this.router.navigate(['/patient-login']);
       },
-      error: (err) => {
+      error: (err: any) => {
         this.isLoading = false;
         this.errorMessage = err?.error?.detail || 'Registration failed. Please check your information.';
       }

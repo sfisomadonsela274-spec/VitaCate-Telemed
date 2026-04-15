@@ -51,6 +51,21 @@ export class AuthService {
     );
   }
 
+  /** Forgot Password — POST /api/users/forgot-password/ */
+  forgotPassword(email: string): Observable<any> {
+    return this.http.post(`${this.base}/forgot-password/`, { email });
+  }
+
+  /** Verify Code — POST /api/users/verify-code/ */
+  verifyCode(email: string, code: string): Observable<any> {
+    return this.http.post(`${this.base}/verify-code/`, { email, code });
+  }
+
+  /** Reset Password — POST /api/users/reset-password/ */
+  resetPassword(data: any): Observable<any> {
+    return this.http.post(`${this.base}/reset-password/`, data);
+  }
+
   logout(): void {
     localStorage.removeItem(this.tokensKey);
     this._tokens.next(null);

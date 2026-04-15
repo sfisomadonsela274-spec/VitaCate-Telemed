@@ -21,7 +21,8 @@ export class AuthInterceptor implements HttpInterceptor {
 
     return next.handle(authReq).pipe(
       catchError(err => {
-        if (err instanceof HttpErrorResponse && err.status === 401 && !req.url.includes('token')) {
+        if (err instanceof HttpErrorResponse && err.status === 401 && 
+            !req.url.includes('token') && !req.url.includes('login')) {
           return this.handle401(authReq, next);
         }
         return throwError(() => err);

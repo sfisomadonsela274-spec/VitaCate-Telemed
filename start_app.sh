@@ -1,33 +1,38 @@
 #!/bin/bash
-# VitaCare Kivy App Launch Script
+# VitaCare Angular App Launch Script
 
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+NG_DIR="$SCRIPT_DIR/vitacare-ng"
 
-echo "=== VitaCare App Setup ==="
+echo "=== VitaCare Angular App Setup ==="
 
-# Create virtual environment if it doesn't exist
-if [ ! -d "venv" ]; then
-    echo "Creating virtual environment..."
-    python3 -m venv venv
+# Check for Node.js
+if ! command -v node &> /dev/null; then
+    echo "Error: Node.js is not installed. Please install Node.js 18+ first."
+    exit 1
 fi
 
-# Activate virtual environment
-echo "Activating virtual environment..."
-source venv/bin/activate
+# Check for npm
+if ! command -v npm &> /dev/null; then
+    echo "Error: npm is not installed. Please install npm first."
+    exit 1
+fi
 
-# Install requirements
-echo "Installing requirements..."
-pip install --upgrade pip
-pip install kivy kivymd requests stripe
+# Install dependencies if node_modules doesn't exist
+if [ ! -d "$NG_DIR/node_modules" ]; then
+    echo "Installing Angular dependencies..."
+    cd "$NG_DIR"
+    npm install
+fi
 
-# Set environment variable for API URL (optional - defaults to localhost:8000)
-export VITACARE_API_URL="${VITACARE_API_URL:-http://127.0.0.1:8000}"
+# Set API URL environment variable
+export VITACARE_API_URL="${VITACARE_API_URL:-http://localhost:8000}"
 
-echo "Starting VitaCare app..."
+echo "Starting VitaCare Angular app..."
 echo "API URL: $VITACARE_API_URL"
 
-# Launch the app
-cd "$SCRIPT_DIR/Vitacare_kivy"
-python main.py
+# Launch the Angular dev server
+cd "$NG_DIR"
+npm start

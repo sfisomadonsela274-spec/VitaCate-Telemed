@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { InputFieldComponent } from '../../shared/components/input-field.component';
 import { PrimaryButtonComponent } from '../../shared/components/primary-button.component';
 import { PremiumCardComponent } from '../../shared/components/premium-card.component';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-forgot-password',
@@ -32,23 +33,44 @@ import { PremiumCardComponent } from '../../shared/components/premium-card.compo
         </div>
 
         <app-premium-card class="card-animate">
-          <div *ngIf="!sent">
+          <div *ngIf="step === 'email'">
             <app-input-field label="Email Address" placeholder="you@example.com" type="email" (valueChange)="email = $event"></app-input-field>
             <p *ngIf="error" class="field-error">{{ error }}</p>
             <app-primary-button [fullWidth]="true" [loading]="loading" (onClick)="sendCode()">Send Reset Code</app-primary-button>
           </div>
 
-          <div *ngIf="sent" class="success-state">
+          <div *ngIf="step === 'code'" class="success-state">
             <div class="success-icon">
               <svg width="32" height="32" viewBox="0 0 24 24" fill="var(--primary-color)">
                 <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
               </svg>
             </div>
             <h3>Check Your Inbox</h3>
-            <p>We sent a 6-digit code to <strong>{{ email }}</strong></p>
-            <app-input-field label="Enter the code" placeholder="123456" (valueChange)="code = $event"></app-input-field>
+            <p>We sent a 5-digit code to <strong>{{ email }}</strong></p>
+            <app-input-field label="Enter the code" placeholder="12345" (valueChange)="code = $event"></app-input-field>
+            <p *ngIf="error" class="field-error">{{ error }}</p>
             <app-primary-button [fullWidth]="true" [loading]="loading" (onClick)="verifyCode()">Verify Code</app-primary-button>
-            <button class="resend-btn" (click)="sent = false">Resend code</button>
+            <button class="resend-btn" (click)="step = 'email'">Resend code</button>
+          </div>
+
+          <div *ngIf="step === 'reset'">
+            <h3>New Password</h3>
+            <p>Set a new secure password for your account</p>
+            <app-input-field label="New Password" type="password" (valueChange)="newPassword = $event"></app-input-field>
+            <app-input-field label="Confirm New Password" type="password" (valueChange)="confirmPassword = $event"></app-input-field>
+            <p *ngIf="error" class="field-error">{{ error }}</p>
+            <app-primary-button [fullWidth]="true" [loading]="loading" (onClick)="resetPassword()">Reset Password</app-primary-button>
+          </div>
+
+          <div *ngIf="step === 'success'" class="success-state">
+             <div class="success-icon">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="var(--primary-color)">
+                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
+              </svg>
+            </div>
+            <h3>Password Reset!</h3>
+            <p>Your password has been updated successfully.</p>
+            <app-primary-button [fullWidth]="true" (onClick)="goBack()">Back to Login</app-primary-button>
           </div>
         </app-premium-card>
 
@@ -84,16 +106,44 @@ import { PremiumCardComponent } from '../../shared/components/premium-card.compo
   `]
 })
 export class ForgotPasswordComponent {
-  email = ''; code = ''; sent = false; loading = false; error = '';
-  constructor(private router: Router) {}
+  email = ''; code = ''; newPassword = ''; confirmPassword = '';
+  step: 'email' | 'code' | 'reset' | 'success' = 'email';
+  loading = false; error = '';
+
+  constructor(private router: Router, private auth: AuthService) {}
+
   goBack() { this.router.navigate(['/patient-login']); }
+
   sendCode() {
     if (!this.email) { this.error = 'Please enter your email'; return; }
     this.loading = true; this.error = '';
-    setTimeout(() => { this.loading = false; this.sent = true; }, 1000);
+    this.auth.forgotPassword(this.email).subscribe({
+      next: () => { this.loading = false; this.step = 'code'; },
+      error: (err: any) => { this.loading = false; this.error = err?.error?.detail || 'User not found'; }
+    });
   }
+
   verifyCode() {
-    this.loading = true;
-    setTimeout(() => { this.loading = false; this.router.navigate(['/patient-login']); }, 800);
+    if (!this.code) { this.error = 'Please enter the code'; return; }
+    this.loading = true; this.error = '';
+    this.auth.verifyCode(this.email, this.code).subscribe({
+      next: () => { this.loading = false; this.step = 'reset'; },
+      error: (err: any) => { this.loading = false; this.error = err?.error?.error || 'Invalid code'; }
+    });
+  }
+
+  resetPassword() {
+    if (!this.newPassword || !this.confirmPassword) { this.error = 'All fields required'; return; }
+    if (this.newPassword !== this.confirmPassword) { this.error = 'Passwords do not match'; return; }
+    
+    this.loading = true; this.error = '';
+    this.auth.resetPassword({
+      email: this.email,
+      new_password: this.newPassword,
+      confirm_password: this.confirmPassword
+    }).subscribe({
+      next: () => { this.loading = false; this.step = 'success'; },
+      error: (err: any) => { this.loading = false; this.error = err?.error?.detail || 'Failed to reset password'; }
+    });
   }
 }

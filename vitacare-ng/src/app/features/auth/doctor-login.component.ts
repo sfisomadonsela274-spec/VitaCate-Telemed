@@ -235,7 +235,7 @@ export class DoctorLoginComponent {
         this.isLoading = false;
         this.router.navigate(['/doctor-home']);
       },
-      error: (err) => {
+      error: (err: any) => {
         this.isLoading = false;
         this.errorMessage = err?.error?.detail || 'Invalid credentials. Please try again.';
       }
