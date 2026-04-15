@@ -88,7 +88,16 @@ def get_screen_imports() -> Dict[str, Type[Screen]]:
 
 def load_kv_files() -> bool:
     """Load all KV files with proper error handling."""
+    from kivy.core.text import LabelBase
+    try:
+        LabelBase.register(name='Poppins', fn_regular=str(BASE_DIR / 'Poppins.ttf'), fn_bold=str(BASE_DIR / 'Poppins.ttf'))
+        LabelBase.register(name='Inter', fn_regular=str(BASE_DIR / 'Inter.ttf'), fn_bold=str(BASE_DIR / 'Inter.ttf'))
+        logger.info("Custom fonts registered successfully")
+    except Exception as e:
+        logger.error(f"Failed to register custom fonts: {e}")
+        
     kv_files = [
+        "design_system.kv",
         "welcome_screen.kv",
         "patient_login.kv",
         "doctor_login.kv",
@@ -131,9 +140,13 @@ class VitaCareApp(MDApp):
         self.screen_manager = None
         self._screens = {}
         
-        # Configure theme
-        self.theme_cls.primary_palette = "Blue"
+        # Configure theme - Custom VitaCare palette
+        self.theme_cls.primary_palette = "Teal"
+        self.theme_cls.accent_palette = "Brown"
         self.theme_cls.theme_style = "Light"
+        # Custom colors for VitaCare design system
+        # Removed the direct overwrite of self.theme_cls.colors because this breaks KivyMD internal widgets that look up palettes like 'Teal'.
+        # Custom colors are already defined in design_system.kv.
         
         # Configure window settings
         self._configure_window()

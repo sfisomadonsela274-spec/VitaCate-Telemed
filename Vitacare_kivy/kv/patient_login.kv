@@ -1,193 +1,353 @@
 <PatientLoginScreen>:
     name: "patient_login"
 
-    # Background Image
+    # Background with subtle decorative elements
     FloatLayout:
         canvas.before:
+            # Warm cream base
             Color:
-                rgba: 0.95, 0.95, 0.98, 1
+                rgba: 0.988, 0.980, 0.973, 1
             Rectangle:
                 pos: self.pos
                 size: self.size
-            # You can add a background image here
-            # Image:
-            #     source: "assets/medical_background.jpg"
-            #     pos: self.pos
-            #     size: self.size
+            # Top-right decorative arc
+            Color:
+                rgba: 0.345, 0.439, 0.392, 0.06
+            Ellipse:
+                size: self.size[0] * 1.2, self.size[0] * 0.7
+                pos: self.size[0] * 0.5, self.size[1] * 0.7
+            # Bottom-left decorative arc
+            Color:
+                rgba: 0.949, 0.545, 0.514, 0.04
+            Ellipse:
+                size: self.size[0] * 0.8, self.size[0] * 0.5
+                pos: self.size[0] * -0.3, self.size[1] * -0.1
 
     BoxLayout:
         orientation: 'vertical'
-        padding: dp(20)
+        padding: dp(24)
         spacing: dp(20)
 
-        # Header Section
+        # Back button and header
         BoxLayout:
             orientation: 'vertical'
-            size_hint_y: 0.3
-            spacing: dp(10)
-            padding: dp(10)
+            size_hint_y: 0.15
+            spacing: dp(16)
 
-            # Patient Icon and Title
-            FloatLayout:
-                size_hint_y: 0.6
+            # Navigation row
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint_y: None
+                height: dp(48)
 
+                # Back button
                 MDIconButton:
                     icon: "arrow-left"
                     theme_text_color: "Custom"
-                    text_color: 0.1, 0.5, 0.8, 1
+                    text_color: 0.345, 0.439, 0.392, 1
                     pos_hint: {"x": 0, "center_y": 0.5}
                     radius: [12,]
                     on_release: root.on_back_press()
 
-                MDIcon:
-                    icon: "account"
+                Widget:
+                    size_hint_x: 1
+
+            # Welcome text
+            BoxLayout:
+                orientation: 'vertical'
+                spacing: dp(4)
+                size_hint_y: None
+                height: self.minimum_height
+
+                MDLabel:
+                    text: "Welcome Back"
                     theme_text_color: "Custom"
-                    text_color: 0.1, 0.5, 0.8, 1
-                    font_size: "64sp"
-                    pos_hint: {"center_x": 0.5, "center_y": 0.5}
+                    text_color: 0.267, 0.349, 0.306, 1
+                    font_name: "Poppins"
+                    font_size: "28sp"
+                    bold: True
+                    halign: "center"
+                    size_hint_y: None
+                    height: self.texture_size[1]
 
-            MDLabel:
-                text: "Patient Portal"
-                theme_text_color: "Custom"
-                text_color: 0.1, 0.3, 0.6, 1
-                font_style: "H4"
-                bold: True
-                halign: "center"
-                size_hint_y: 0.3
+                MDLabel:
+                    text: "Sign in to access your health dashboard"
+                    theme_text_color: "Custom"
+                    text_color: 0.498, 0.494, 0.490, 1
+                    font_name: "Inter"
+                    font_size: "13sp"
+                    halign: "center"
+                    size_hint_y: None
+                    height: self.texture_size[1]
 
-            MDLabel:
-                text: "Secure access to your health dashboard"
-                theme_text_color: "Secondary"
-                halign: "center"
-                font_style: "Body1"
-                size_hint_y: 0.2
-
-        # Login Card
+        # Login form card
         MDCard:
             orientation: 'vertical'
             size_hint: None, None
-            size: dp(350), dp(450)
+            size: dp(340), dp(380)
             pos_hint: {"center_x": 0.5, "center_y": 0.5}
-            elevation: 8
-            padding: dp(25)
-            spacing: dp(20)
             md_bg_color: 1, 1, 1, 1
+            radius: [dp(24),]
+            elevation: 0
+            padding: dp(24)
+            spacing: dp(20)
+            canvas.before:
+                # Subtle shadow
+                Color:
+                    rgba: 0.267, 0.259, 0.255, 0.06
+                RoundedRectangle:
+                    size: self.size[0] + dp(16), self.size[1] + dp(16)
+                    pos: self.pos[0] - dp(8), self.pos[1] - dp(8)
+                    radius: [dp(28),]
+                # Card
+                Color:
+                    rgba: 1, 1, 1, 1
+                RoundedRectangle:
+                    size: self.size
+                    pos: self.pos
+                    radius: [dp(24),]
+                # Top accent line
+                Color:
+                    rgba: 0.345, 0.439, 0.392, 0.6
+                RoundedRectangle:
+                    size: self.size[0], dp(3)
+                    pos: self.pos[0], self.pos[1] + self.size[1] - dp(3)
+                    radius: [dp(3), dp(3), 0, 0]
 
-            MDLabel:
-                text: "Login to Your Account"
-                theme_text_color: "Custom"
-                text_color: 0.1, 0.3, 0.6, 1
-                font_style: "H5"
-                bold: True
-                halign: "center"
-                size_hint_y: None
-                height: self.texture_size[1]
-
-            # Email Field
+            # Email field with icon
             BoxLayout:
-                orientation: 'horizontal'
+                orientation: 'vertical'
+                spacing: dp(8)
                 size_hint_y: None
-                height: dp(56)
-                spacing: dp(10)
+                height: dp(90)
 
-                MDIcon:
-                    icon: "email"
+                MDLabel:
+                    text: "Email"
                     theme_text_color: "Custom"
-                    text_color: 0.1, 0.5, 0.8, 1
-                    size_hint_x: 0.2
+                    text_color: 0.498, 0.494, 0.490, 1
+                    font_name: "Inter"
+                    font_size: "12sp"
+                    halign: "left"
+                    size_hint_y: None
+                    height: self.texture_size[1]
 
-                MDTextField:
-                    id: email_input
-                    hint_text: "Email Address"
-                    mode: "rectangle"
-                    size_hint_x: 0.8
-                    icon_left: ""
-                    text_color: 0.1, 0.1, 0.1, 1
-                    line_color_focus: 0.1, 0.5, 0.8, 1
-                    on_text_validate: password_input.focus = True
+                BoxLayout:
+                    orientation: 'horizontal'
+                    size_hint_y: None
+                    height: dp(52)
+                    spacing: dp(12)
+                    padding: [dp(16), 0]
+                    canvas.before:
+                        Color:
+                            rgba: 0.737, 0.729, 0.725, 0.5
+                        RoundedRectangle:
+                            size: self.size
+                            pos: self.pos
+                            radius: [dp(12),]
+                        Color:
+                            rgba: 0.345, 0.439, 0.392, 0.8
+                        RoundedRectangle:
+                            size: self.size[0], dp(2)
+                            pos: self.pos[0], self.pos[1]
+                            radius: [dp(12), dp(12), 0, 0]
 
-            # Password Field
+                    MDIcon:
+                        icon: "email-outline"
+                        theme_text_color: "Custom"
+                        text_color: 0.345, 0.439, 0.392, 1
+                        font_size: "20sp"
+                        size_hint_x: None
+                        width: dp(24)
+
+                    MDTextField:
+                        id: email_input
+                        hint_text: "patient@example.com"
+                        mode: "rectangle"
+                        size_hint_x: 1
+                        icon_left: ""
+                        text_color: 0.267, 0.259, 0.255, 1
+                        hint_text_color: 0.737, 0.729, 0.725, 1
+                        font_name: "Inter"
+                        font_size: "14sp"
+                        line_color_focus: 0.345, 0.439, 0.392, 1
+                        on_text_validate: password_input.focus = True
+
+            # Password field with icon
             BoxLayout:
-                orientation: 'horizontal'
+                orientation: 'vertical'
+                spacing: dp(8)
                 size_hint_y: None
-                height: dp(56)
-                spacing: dp(10)
+                height: dp(90)
 
-                MDIcon:
-                    icon: "lock"
+                MDLabel:
+                    text: "Password"
                     theme_text_color: "Custom"
-                    text_color: 0.1, 0.5, 0.8, 1
-                    size_hint_x: 0.15
+                    text_color: 0.498, 0.494, 0.490, 1
+                    font_name: "Inter"
+                    font_size: "12sp"
+                    halign: "left"
+                    size_hint_y: None
+                    height: self.texture_size[1]
 
-                MDTextField:
-                    id: password_input
-                    hint_text: "Password"
-                    mode: "rectangle"
-                    size_hint_x: 0.7
-                    password: True
-                    text_color: 0.1, 0.1, 0.1, 1
-                    line_color_focus: 0.1, 0.5, 0.8, 1
-                    on_text_validate: login_button.trigger_action()
+                BoxLayout:
+                    orientation: 'horizontal'
+                    size_hint_y: None
+                    height: dp(52)
+                    spacing: dp(12)
+                    padding: [dp(16), 0]
+                    canvas.before:
+                        Color:
+                            rgba: 0.737, 0.729, 0.725, 0.5
+                        RoundedRectangle:
+                            size: self.size
+                            pos: self.pos
+                            radius: [dp(12),]
+                        Color:
+                            rgba: 0.345, 0.439, 0.392, 0.8
+                        RoundedRectangle:
+                            size: self.size[0], dp(2)
+                            pos: self.pos[0], self.pos[1]
+                            radius: [dp(12), dp(12), 0, 0]
 
-                MDIconButton:
-                    icon: "eye-off"
-                    size_hint_x: 0.15
-                    pos_hint: {"center_y": 0.5}
-                    radius: [12,]
-                    on_release:
-                        password_input.password = not password_input.password
-                        self.icon = "eye" if not password_input.password else "eye-off"
+                    MDIcon:
+                        icon: "lock-outline"
+                        theme_text_color: "Custom"
+                        text_color: 0.345, 0.439, 0.392, 1
+                        font_size: "20sp"
+                        size_hint_x: None
+                        width: dp(24)
 
-            # Forgot Password Link
+                    MDTextField:
+                        id: password_input
+                        hint_text: "Enter your password"
+                        mode: "rectangle"
+                        size_hint_x: 1
+                        password: True
+                        icon_left: ""
+                        text_color: 0.267, 0.259, 0.255, 1
+                        hint_text_color: 0.737, 0.729, 0.725, 1
+                        font_name: "Inter"
+                        font_size: "14sp"
+                        line_color_focus: 0.345, 0.439, 0.392, 1
+                        on_text_validate: root.login_user()
+
+                    MDIconButton:
+                        icon: "eye-off"
+                        theme_text_color: "Custom"
+                        text_color: 0.737, 0.729, 0.725, 1
+                        size_hint_x: None
+                        width: dp(32)
+                        radius: [12,]
+                        on_release:
+                            password_input.password = not password_input.password
+                            self.icon = "eye" if not password_input.password else "eye-off"
+
+            # Forgot password link
             MDTextButton:
                 text: "Forgot Password?"
                 theme_text_color: "Custom"
-                text_color: 0.1, 0.5, 0.8, 1
-                font_style: "Caption"
+                text_color: 0.345, 0.439, 0.392, 1
+                font_name: "Inter"
+                font_size: "12sp"
                 halign: "right"
                 size_hint_y: None
-                height: dp(30)
+                height: dp(32)
                 on_release: app.root.current = "forgot_password_email"
 
-            # Login Button
+            # Login button
             MDRaisedButton:
                 id: login_button
-                text: "Login"
-                md_bg_color: 0.1, 0.5, 0.8, 1
-                theme_text_color: "Custom"
-                text_color: 1, 1, 1, 1
-                size_hint_y: None
-                height: dp(50)
-                font_style: "Button"
+                text: "Sign In"
+                md_bg_color: 0.345, 0.439, 0.392, 1
+                text_color: 0.996, 0.992, 0.988, 1
+                font_name: "Poppins"
+                font_size: "15sp"
                 bold: True
-                elevation: 4
-                on_release: root.login_user()
-
-            # Sign Up Button
-            MDTextButton:
-                text: "Don't have an account? Sign Up"
-                theme_text_color: "Custom"
-                text_color: 0.1, 0.5, 0.8, 1
-                font_style: "Caption"
-                halign: "center"
                 size_hint_y: None
-                height: dp(30)
-                on_release: app.root.current = "sign_up"
+                height: dp(52)
+                elevation: 0
+                radius: [dp(26),]
+                on_release: root.login_user()
+                canvas.before:
+                    Color:
+                        rgba: 0.345, 0.439, 0.392, 0.15
+                    RoundedRectangle:
+                        size: self.size[0] + dp(4), self.size[1] + dp(4)
+                        pos: self.pos[0] - dp(2), self.pos[1] - dp(2)
+                        radius: [dp(28),]
+
+            # Divider with text
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint_y: None
+                height: dp(32)
+                spacing: dp(16)
+
+                Widget:
+                    canvas.before:
+                        Color:
+                            rgba: 0.737, 0.729, 0.725, 0.5
+                        Line:
+                            points: 0, self.height/2, self.width, self.height/2
+                            width: dp(1)
+
+                MDLabel:
+                    text: "or"
+                    theme_text_color: "Custom"
+                    text_color: 0.737, 0.729, 0.725, 1
+                    font_name: "Inter"
+                    font_size: "12sp"
+                    halign: "center"
+                    size_hint_x: None
+                    width: dp(32)
+
+                Widget:
+                    canvas.before:
+                        Color:
+                            rgba: 0.737, 0.729, 0.725, 0.5
+                        Line:
+                            points: 0, self.height/2, self.width, self.height/2
+                            width: dp(1)
+
+            # Sign up link
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint_y: None
+                height: dp(32)
+                halign: "center"
+
+                MDLabel:
+                    text: "Don't have an account?"
+                    theme_text_color: "Custom"
+                    text_color: 0.498, 0.494, 0.490, 1
+                    font_name: "Inter"
+                    font_size: "12sp"
+                    halign: "right"
+                    size_hint_x: None
+                    width: dp(130)
+
+                MDTextButton:
+                    text: "Sign Up"
+                    theme_text_color: "Custom"
+                    text_color: 0.949, 0.545, 0.514, 1
+                    font_name: "Poppins"
+                    font_size: "12sp"
+                    bold: True
+                    halign: "left"
+                    size_hint_x: None
+                    width: dp(60)
+                    on_release: app.root.current = "sign_up"
 
         # Footer
         BoxLayout:
             orientation: 'vertical'
-            size_hint_y: 0.15
-            spacing: dp(5)
+            size_hint_y: 0.1
+            spacing: dp(8)
 
             MDLabel:
-                text: "VitaCare Medical Systems"
-                theme_text_color: "Secondary"
-                font_style: "Caption"
-                halign: "center"
-
-            MDLabel:
-                text: "Secure • Reliable • Caring"
-                theme_text_color: "Secondary"
-                font_style: "Overline"
+                text: "By signing in, you agree to our Terms of Service and Privacy Policy"
+                theme_text_color: "Custom"
+                text_color: 0.737, 0.729, 0.725, 1
+                font_name: "Inter"
+                font_size: "10sp"
                 halign: "center"

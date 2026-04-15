@@ -1,259 +1,470 @@
-#:import App kivy.app.App
-
 <PatientHomeScreen>:
     name: 'patient_home'
-    
-    # Background
+
+    # Warm premium background
     FloatLayout:
         canvas.before:
+            # Base cream
             Color:
-                rgba: 0.95, 0.95, 0.98, 1
+                rgba: 0.988, 0.980, 0.973, 1
             Rectangle:
                 pos: self.pos
                 size: self.size
+            # Subtle gradient accent at top
+            Color:
+                rgba: 0.345, 0.439, 0.392, 0.04
+            Rectangle:
+                size: self.size[0], self.size[1] * 0.4
+                pos: self.pos[0], self.pos[1] + self.size[1] * 0.6
 
     BoxLayout:
         orientation: 'vertical'
         padding: dp(20)
-        spacing: dp(20)
+        spacing: dp(16)
 
         # Header Section
         BoxLayout:
             orientation: 'vertical'
-            size_hint_y: 0.2
-            spacing: dp(10)
-            padding: [dp(10), dp(5), dp(10), dp(5)]
+            size_hint_y: 0.22
+            spacing: dp(12)
 
-            # Welcome Header with Icons
+            # Navigation bar
             BoxLayout:
                 orientation: 'horizontal'
-                size_hint_y: 0.5
-                padding: [dp(5), 0, dp(5), 0]
-                
+                size_hint_y: None
+                height: dp(48)
+                padding: [0, 0, 0, 0]
+
+                # Home button
                 MDIconButton:
                     icon: "home"
                     theme_text_color: "Custom"
-                    text_color: 0.1, 0.5, 0.8, 1
+                    text_color: 0.345, 0.439, 0.392, 1
                     pos_hint: {"x": 0, "center_y": 0.5}
                     radius: [12,]
+                    md_bg_color: 0.345, 0.439, 0.392, 0.08
                     on_release: root.show_home_confirmation()
 
+                Widget:
+                    size_hint_x: 1
+
+                # Notifications button
+                MDIconButton:
+                    icon: "bell-outline"
+                    theme_text_color: "Custom"
+                    text_color: 0.498, 0.494, 0.490, 1
+                    pos_hint: {"center_y": 0.5}
+                    radius: [12,]
+                    md_bg_color: 0.737, 0.729, 0.725, 0.2
+
+                # Logout button
                 MDIconButton:
                     icon: "logout"
                     theme_text_color: "Custom"
-                    text_color: 0.8, 0.2, 0.2, 1
-                    pos_hint: {"right": 0, "center_y": 0.5}
+                    text_color: 0.949, 0.545, 0.514, 1
+                    pos_hint: {"right": 1, "center_y": 0.5}
                     radius: [12,]
                     on_release: root.show_logout_confirmation()
 
-
+            # Welcome header
             BoxLayout:
                 orientation: 'vertical'
-                size_hint_y: 0.5
-                spacing: dp(5)
-                padding: [0, dp(5), 0, 0]
-                
+                spacing: dp(4)
+                size_hint_y: None
+                height: self.minimum_height
+
                 MDLabel:
                     id: welcome_label
-                    text: "Welcome, Patient!"
+                    text: "Welcome back!"
                     theme_text_color: "Custom"
-                    text_color: 0.1, 0.3, 0.6, 1
-                    font_style: "H4"
+                    text_color: 0.267, 0.349, 0.306, 1
+                    font_name: "Poppins"
+                    font_size: "24sp"
                     bold: True
-                    halign: "center"
-                    size_hint_y: 0.6
-                    valign: 'bottom'
-                    padding: [0, 0, 0, dp(5)]
+                    halign: "left"
+                    size_hint_y: None
+                    height: self.texture_size[1]
 
                 MDLabel:
-                    text: "Your Healthcare Dashboard"
-                    theme_text_color: "Secondary"
-                    halign: "center"
-                    font_style: "Body2"
-                    size_hint_y: 0.4
-                    valign: 'top'
+                    text: "Your health dashboard is ready"
+                    theme_text_color: "Custom"
+                    text_color: 0.498, 0.494, 0.490, 1
+                    font_name: "Inter"
+                    font_size: "13sp"
+                    halign: "left"
+                    size_hint_y: None
+                    height: self.texture_size[1]
 
-        # Main Content Cards
+        # Main Content
         ScrollView:
             do_scroll_x: False
             do_scroll_y: True
-            bar_width: dp(4)
-            bar_color: 0.1, 0.5, 0.8, 0.3
-            bar_inactive_color: 0.1, 0.5, 0.8, 0.1
+            bar_width: 0
             effect_cls: "ScrollEffect"
 
             BoxLayout:
                 orientation: 'vertical'
                 size_hint_y: None
                 height: self.minimum_height
-                spacing: dp(15)
-                padding: [dp(5), dp(10), dp(5), dp(10)]
+                spacing: dp(16)
+                padding: [0, dp(4), 0, dp(8)]
 
-                # Latest Appointment Card
+                # Latest Appointment Card - Hero style
                 MDCard:
                     orientation: 'vertical'
                     size_hint: None, None
-                    size: dp(400), dp(160)
+                    size: dp(340), dp(180)
                     pos_hint: {"center_x": 0.5}
-                    elevation: 2
-                    padding: [dp(15), dp(10), dp(15), dp(15)]
-                    spacing: dp(10)
-                    md_bg_color: 1, 1, 1, 1
-                    radius: [dp(12),]
+                    md_bg_color: 0.345, 0.439, 0.392, 1
+                    radius: [dp(20),]
+                    elevation: 0
+                    padding: dp(20)
+                    spacing: dp(12)
+                    canvas.before:
+                        # Accent glow
+                        Color:
+                            rgba: 0.949, 0.545, 0.514, 0.15
+                        RoundedRectangle:
+                            size: self.size[0] * 0.4, self.size[1] * 0.4
+                            pos: self.pos[0] + self.size[0] * 0.6, self.pos[1] + self.size[1] * 0.6
+                            radius: [dp(60),]
 
-                    MDLabel:
-                        text: "Latest Appointment"
-                        theme_text_color: "Custom"
-                        text_color: 0.1, 0.3, 0.6, 1
-                        font_style: "H5"
-                        bold: True
-                        halign: "center"
+                    BoxLayout:
+                        orientation: 'horizontal'
                         size_hint_y: None
-                        height: self.texture_size[1]
+                        height: dp(60)
+                        spacing: dp(16)
 
-                    MDLabel:
-                        id: appointment_label
-                        text: "Loading appointments..."
-                        theme_text_color: "Secondary"
-                        halign: "center"
-                        font_style: "Body1"
-                        size_hint_y: None
-                        height: self.texture_size[1]
+                        # Icon container
+                        MDCard:
+                            size_hint: None, None
+                            size: dp(56), dp(56)
+                            md_bg_color: 0.345, 0.439, 0.392, 0.2
+                            radius: [dp(16),]
+                            elevation: 0
+
+                            MDIcon:
+                                icon: "calendar-check"
+                                theme_text_color: "Custom"
+                                text_color: 0.996, 0.992, 0.988, 1
+                                font_size: "28sp"
+                                pos_hint: {"center_x": 0.5, "center_y": 0.5}
+
+                        BoxLayout:
+                            orientation: 'vertical'
+                            spacing: dp(4)
+                            size_hint_x: 1
+
+                            MDLabel:
+                                text: "Latest Appointment"
+                                theme_text_color: "Custom"
+                                text_color: 0.996, 0.992, 0.988, 1
+                                font_name: "Poppins"
+                                font_size: "14sp"
+                                bold: True
+                                halign: "left"
+                                size_hint_y: None
+                                height: self.texture_size[1]
+
+                            MDLabel:
+                                id: appointment_label
+                                text: "Loading..."
+                                theme_text_color: "Custom"
+                                text_color: 0.996, 0.992, 0.988, 0.8
+                                font_name: "Inter"
+                                font_size: "12sp"
+                                halign: "left"
+                                size_hint_y: None
+                                height: self.texture_size[1]
 
                     MDRaisedButton:
                         text: "Refresh"
-                        md_bg_color: 0.1, 0.5, 0.8, 1
-                        theme_text_color: "Custom"
-                        text_color: 1, 1, 1, 1
+                        md_bg_color: 0.996, 0.992, 0.988, 1
+                        text_color: 0.345, 0.439, 0.392, 1
+                        font_name: "Poppins"
+                        font_size: "13sp"
+                        bold: True
                         size_hint_y: None
                         height: dp(40)
-                        font_style: "Button"
                         elevation: 0
-                        pos_hint: {"center_x": 0.5}
+                        radius: [dp(20),]
                         on_release: root.load_appointment()
 
-                # Quick Actions Card
-                MDCard:
+                # Quick Actions Section
+                BoxLayout:
                     orientation: 'vertical'
-                    size_hint: None, None
-                    size: dp(400), dp(240)
-                    pos_hint: {"center_x": 0.5}
-                    elevation: 2
-                    padding: [dp(15), dp(10), dp(15), dp(15)]
-                    spacing: dp(10)
-                    md_bg_color: 1, 1, 1, 1
-                    radius: [dp(12),]
+                    spacing: dp(12)
+                    size_hint_y: None
+                    height: self.minimum_height
 
                     MDLabel:
                         text: "Quick Actions"
                         theme_text_color: "Custom"
-                        text_color: 0.1, 0.3, 0.6, 1
-                        font_style: "H5"
+                        text_color: 0.267, 0.259, 0.255, 1
+                        font_name: "Poppins"
+                        font_size: "16sp"
                         bold: True
-                        halign: "center"
+                        halign: "left"
                         size_hint_y: None
                         height: self.texture_size[1]
 
+                    # Action buttons grid
                     GridLayout:
                         cols: 2
-                        spacing: dp(10), dp(12)
-                        padding: [0, dp(5), 0, 0]
+                        spacing: dp(12), dp(12)
                         size_hint_y: None
                         height: self.minimum_height
-                        row_default_height: dp(45)
+                        row_default_height: dp(70)
                         row_force_default: True
 
-                        MDRaisedButton:
-                            text: "Book New Appointment"
-                            md_bg_color: 0.1, 0.5, 0.8, 1
-                            theme_text_color: "Custom"
-                            text_color: 1, 1, 1, 1
-                            font_style: "Button"
+                        # Book Appointment
+                        MDCard:
+                            orientation: 'horizontal'
+                            size_hint: None, None
+                            size: dp(160), dp(70)
+                            md_bg_color: 1, 1, 1, 1
+                            radius: [dp(16),]
                             elevation: 0
                             on_release: root.manager.current = 'book_appointment'
+                            canvas.before:
+                                Color:
+                                    rgba: 0.345, 0.439, 0.392, 0.06
+                                RoundedRectangle:
+                                    size: self.size[0] + dp(2), self.size[1] + dp(2)
+                                    pos: self.pos[0] - dp(1), self.pos[1] - dp(1)
+                                    radius: [dp(17),]
 
-                        MDRaisedButton:
-                            text: "View Prescriptions"
-                            md_bg_color: 0.2, 0.6, 0.9, 1
-                            theme_text_color: "Custom"
-                            text_color: 1, 1, 1, 1
-                            font_style: "Button"
+                            MDIcon:
+                                icon: "calendar-plus"
+                                theme_text_color: "Custom"
+                                text_color: 0.345, 0.439, 0.392, 1
+                                font_size: "24sp"
+                                size_hint_x: None
+                                width: dp(40)
+
+                            MDLabel:
+                                text: "Book\nAppointment"
+                                theme_text_color: "Custom"
+                                text_color: 0.267, 0.259, 0.255, 1
+                                font_name: "Poppins"
+                                font_size: "12sp"
+                                bold: True
+                                halign: "left"
+                                valign: "middle"
+
+                        # View Prescriptions
+                        MDCard:
+                            orientation: 'horizontal'
+                            size_hint: None, None
+                            size: dp(160), dp(70)
+                            md_bg_color: 1, 1, 1, 1
+                            radius: [dp(16),]
                             elevation: 0
                             on_release: root.manager.current = 'patient_prescriptions'
+                            canvas.before:
+                                Color:
+                                    rgba: 0.949, 0.545, 0.514, 0.06
+                                RoundedRectangle:
+                                    size: self.size[0] + dp(2), self.size[1] + dp(2)
+                                    pos: self.pos[0] - dp(1), self.pos[1] - dp(1)
+                                    radius: [dp(17),]
 
-                        MDRaisedButton:
-                            text: "View Consultations"
-                            md_bg_color: 0.3, 0.7, 1.0, 1
-                            theme_text_color: "Custom"
-                            text_color: 1, 1, 1, 1
-                            font_style: "Button"
+                            MDIcon:
+                                icon: "pill"
+                                theme_text_color: "Custom"
+                                text_color: 0.949, 0.545, 0.514, 1
+                                font_size: "24sp"
+                                size_hint_x: None
+                                width: dp(40)
+
+                            MDLabel:
+                                text: "View\nPrescriptions"
+                                theme_text_color: "Custom"
+                                text_color: 0.267, 0.259, 0.255, 1
+                                font_name: "Poppins"
+                                font_size: "12sp"
+                                bold: True
+                                halign: "left"
+                                valign: "middle"
+
+                        # View Consultations
+                        MDCard:
+                            orientation: 'horizontal'
+                            size_hint: None, None
+                            size: dp(160), dp(70)
+                            md_bg_color: 1, 1, 1, 1
+                            radius: [dp(16),]
                             elevation: 0
                             on_release: root.manager.current = 'patient_consultations'
+                            canvas.before:
+                                Color:
+                                    rgba: 0.365, 0.651, 0.620, 0.08
+                                RoundedRectangle:
+                                    size: self.size[0] + dp(2), self.size[1] + dp(2)
+                                    pos: self.pos[0] - dp(1), self.pos[1] - dp(1)
+                                    radius: [dp(17),]
 
-                        MDRaisedButton:
-                            text: "Chat with Doctor"
-                            md_bg_color: 0.6, 0.2, 0.8, 1
-                            theme_text_color: "Custom"
-                            text_color: 1, 1, 1, 1
-                            font_style: "Button"
+                            MDIcon:
+                                icon: "file-document"
+                                theme_text_color: "Custom"
+                                text_color: 0.365, 0.651, 0.620, 1
+                                font_size: "24sp"
+                                size_hint_x: None
+                                width: dp(40)
+
+                            MDLabel:
+                                text: "View\nConsultations"
+                                theme_text_color: "Custom"
+                                text_color: 0.267, 0.259, 0.255, 1
+                                font_name: "Poppins"
+                                font_size: "12sp"
+                                bold: True
+                                halign: "left"
+                                valign: "middle"
+
+                        # Chat with Doctor
+                        MDCard:
+                            orientation: 'horizontal'
+                            size_hint: None, None
+                            size: dp(160), dp(70)
+                            md_bg_color: 1, 1, 1, 1
+                            radius: [dp(16),]
                             elevation: 0
                             on_release: root.start_chat()
+                            canvas.before:
+                                Color:
+                                    rgba: 0.624, 0.565, 0.776, 0.08
+                                RoundedRectangle:
+                                    size: self.size[0] + dp(2), self.size[1] + dp(2)
+                                    pos: self.pos[0] - dp(1), self.pos[1] - dp(1)
+                                    radius: [dp(17),]
 
-                        Widget:
+                            MDIcon:
+                                icon: "chat"
+                                theme_text_color: "Custom"
+                                text_color: 0.624, 0.565, 0.776, 1
+                                font_size: "24sp"
+                                size_hint_x: None
+                                width: dp(40)
 
-                        MDRaisedButton:
-                            text: "Start Video Call"
-                            md_bg_color: 0.1, 0.8, 0.4, 1
-                            theme_text_color: "Custom"
-                            text_color: 1, 1, 1, 1
-                            font_style: "Button"
+                            MDLabel:
+                                text: "Chat with\nDoctor"
+                                theme_text_color: "Custom"
+                                text_color: 0.267, 0.259, 0.255, 1
+                                font_name: "Poppins"
+                                font_size: "12sp"
+                                bold: True
+                                halign: "left"
+                                valign: "middle"
+
+                        # Video Call (full width)
+                        MDCard:
+                            orientation: 'horizontal'
+                            size_hint: None, None
+                            size: dp(160), dp(70)
+                            md_bg_color: 1, 1, 1, 1
+                            radius: [dp(16),]
                             elevation: 0
                             on_release: root.start_video_call()
+                            canvas.before:
+                                Color:
+                                    rgba: 0.365, 0.651, 0.620, 0.08
+                                RoundedRectangle:
+                                    size: self.size[0] + dp(2), self.size[1] + dp(2)
+                                    pos: self.pos[0] - dp(1), self.pos[1] - dp(1)
+                                    radius: [dp(17),]
 
-                # Health Tips Card
+                            MDIcon:
+                                icon: "video"
+                                theme_text_color: "Custom"
+                                text_color: 0.365, 0.651, 0.620, 1
+                                font_size: "24sp"
+                                size_hint_x: None
+                                width: dp(40)
+
+                            MDLabel:
+                                text: "Video Call"
+                                theme_text_color: "Custom"
+                                text_color: 0.267, 0.259, 0.255, 1
+                                font_name: "Poppins"
+                                font_size: "12sp"
+                                bold: True
+                                halign: "left"
+                                valign: "middle"
+
+                        Widget:
+                            size_hint: None, None
+                            size: 0, 0
+
+                # Health Tip Card
                 MDCard:
-                    orientation: 'vertical'
+                    orientation: 'horizontal'
                     size_hint: None, None
-                    size: dp(400), dp(140)
+                    size: dp(340), dp(100)
                     pos_hint: {"center_x": 0.5}
-                    elevation: 2
-                    padding: [dp(15), dp(10), dp(15), dp(15)]
-                    spacing: dp(8)
                     md_bg_color: 1, 1, 1, 1
-                    radius: [dp(12),]
+                    radius: [dp(16),]
+                    elevation: 0
+                    padding: dp(16)
+                    spacing: dp(12)
+                    canvas.before:
+                        Color:
+                            rgba: 0.808, 0.686, 0.424, 0.08
+                        RoundedRectangle:
+                            size: self.size[0] + dp(2), self.size[1] + dp(2)
+                            pos: self.pos[0] - dp(1), self.pos[1] - dp(1)
+                            radius: [dp(17),]
 
-                    MDLabel:
-                        text: "Health Tip"
-                        theme_text_color: "Custom"
-                        text_color: 0.1, 0.3, 0.6, 1
-                        font_style: "H6"
-                        bold: True
-                        halign: "center"
-                        size_hint_y: None
-                        height: self.texture_size[1]
+                    MDCard:
+                        size_hint: None, None
+                        size: dp(44), dp(44)
+                        md_bg_color: 0.808, 0.686, 0.424, 0.1
+                        radius: [dp(12),]
+                        elevation: 0
 
-                    MDLabel:
-                        text: "Remember to take your medications on time and stay hydrated!"
-                        theme_text_color: "Secondary"
-                        halign: "center"
-                        font_style: "Body2"
-                        size_hint_y: None
-                        height: self.texture_size[1]
+                        MDIcon:
+                            icon: "lightbulb"
+                            theme_text_color: "Custom"
+                            text_color: 0.808, 0.686, 0.424, 1
+                            font_size: "22sp"
+                            pos_hint: {"center_x": 0.5, "center_y": 0.5}
+
+                    BoxLayout:
+                        orientation: 'vertical'
+                        spacing: dp(4)
+                        size_hint_x: 1
+
+                        MDLabel:
+                            text: "Health Tip"
+                            theme_text_color: "Custom"
+                            text_color: 0.808, 0.686, 0.424, 1
+                            font_name: "Poppins"
+                            font_size: "12sp"
+                            bold: True
+                            halign: "left"
+                            size_hint_y: None
+                            height: self.texture_size[1]
+
+                        MDLabel:
+                            text: "Remember to take your medications on time and stay hydrated!"
+                            theme_text_color: "Custom"
+                            text_color: 0.498, 0.494, 0.490, 1
+                            font_name: "Inter"
+                            font_size: "11sp"
+                            halign: "left"
+                            text_size: self.size
+                            valign: "top"
 
         # Footer
         BoxLayout:
             orientation: 'vertical'
-            size_hint_y: 0.15
-            spacing: dp(5)
+            size_hint_y: 0.08
+            spacing: dp(4)
 
             MDLabel:
                 text: "VitaCare Patient Portal"
-                theme_text_color: "Secondary"
-                font_style: "Caption"
-                halign: "center"
-
-            MDLabel:
-                text: "Your Health, Our Priority"
-                theme_text_color: "Secondary"
-                font_style: "Overline"
+                theme_text_color: "Custom"
+                text_color: 0.737, 0.729, 0.725, 1
+                font_name: "Inter"
+                font_size: "10sp"
                 halign: "center"

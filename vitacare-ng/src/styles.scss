@@ -1,0 +1,221 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@400;500;600;700&display=swap');
+
+/* =============================================
+   VitaCare Design System — Soft Clinical Luxury
+   ============================================= */
+
+:root {
+  /* Brand Colors */
+  --primary-color:    #587064;
+  --primary-light:    #7f9c8f;
+  --primary-dark:     #44594e;
+  --primary-pale:     rgba(88, 112, 100, 0.08);
+
+  --secondary-color:  #f28b83;
+  --secondary-light:  #f9c4bf;
+  --secondary-dark:   #d45750;
+  --secondary-pale:   rgba(242, 139, 131, 0.08);
+
+  --teal:             #5da69e;
+  --teal-pale:        rgba(93, 166, 158, 0.08);
+  --purple:           #9f90c6;
+  --purple-pale:      rgba(159, 144, 198, 0.08);
+  --gold:             #c9a834;
+  --gold-pale:        rgba(201, 168, 52, 0.08);
+
+  /* Neutrals */
+  --background-cream: #fcfaf8;
+  --surface-white:    #ffffff;
+  --text-dark:        #444241;
+  --text-muted:       #7f7e7d;
+  --text-ultralight:  #bcbcbc;
+  --border-light:     rgba(88, 112, 100, 0.15);
+  --divider:          #f0eeeb;
+
+  /* Error */
+  --error:            #e15a5a;
+
+  /* Typography */
+  --font-header: 'Poppins', -apple-system, sans-serif;
+  --font-body:   'Inter', -apple-system, sans-serif;
+
+  /* Shadows */
+  --shadow-xs:      0 1px 4px rgba(68, 89, 78, 0.06);
+  --shadow-soft:    0 4px 14px rgba(68, 89, 78, 0.08);
+  --shadow-premium: 0 8px 32px rgba(68, 89, 78, 0.10);
+  --shadow-lifted:  0 16px 48px rgba(68, 89, 78, 0.14);
+
+  /* Radii */
+  --radius-xs:  6px;
+  --radius-sm:  10px;
+  --radius-md:  16px;
+  --radius-lg:  24px;
+  --radius-xl:  32px;
+  --radius-full: 9999px;
+
+  /* Transitions */
+  --transition-fast: 0.15s ease;
+  --transition-base: 0.2s ease;
+  --transition-slow: 0.35s ease;
+}
+
+/* ===================== Reset ===================== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background-color: var(--background-cream);
+  color: var(--text-dark);
+  font-family: var(--font-body);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-header);
+  font-weight: 600;
+  color: var(--primary-dark);
+  line-height: 1.25;
+}
+
+a { text-decoration: none; color: var(--primary-color); transition: color var(--transition-base); }
+a:hover { color: var(--secondary-color); }
+
+button { font-family: var(--font-header); cursor: pointer; border: none; }
+input, textarea, select { font-family: var(--font-body); }
+
+/* ===================== Page Transitions ===================== */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(24px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.5; }
+}
+@keyframes shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.96); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* ===================== Layout Utilities ===================== */
+.page-animate   { animation: fadeInUp 0.4s ease both; }
+.card-animate   { animation: scaleIn 0.3s ease both; }
+.slide-in-right { animation: slideInRight 0.35s ease both; }
+
+/* Stagger children */
+.stagger > *:nth-child(1) { animation-delay: 0.05s; }
+.stagger > *:nth-child(2) { animation-delay: 0.10s; }
+.stagger > *:nth-child(3) { animation-delay: 0.15s; }
+.stagger > *:nth-child(4) { animation-delay: 0.20s; }
+.stagger > *:nth-child(5) { animation-delay: 0.25s; }
+
+/* ===================== Shared Components ===================== */
+
+/* Premium Card */
+.vitacard {
+  background: var(--surface-white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+  padding: 20px;
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+.vitacard:hover { transform: translateY(-2px); box-shadow: var(--shadow-premium); }
+
+/* Badge chip */
+.chip {
+  display: inline-flex; align-items: center;
+  padding: 4px 10px; border-radius: var(--radius-full);
+  font-size: 0.7rem; font-weight: 600; text-transform: capitalize;
+}
+.chip-green   { background: rgba(88,112,100,0.1); color: var(--primary-color); }
+.chip-coral   { background: rgba(242,139,131,0.1); color: var(--secondary-dark); }
+.chip-teal    { background: rgba(93,166,158,0.1);  color: var(--teal); }
+.chip-purple  { background: rgba(159,144,198,0.1); color: var(--purple); }
+.chip-gold    { background: rgba(201,168,52,0.1);  color: var(--gold); }
+
+/* Skeleton loader */
+.skeleton {
+  background: linear-gradient(90deg, #f0eeeb 25%, #e8e5e1 50%, #f0eeeb 75%);
+  background-size: 400px 100%;
+  animation: shimmer 1.4s infinite;
+  border-radius: var(--radius-sm);
+}
+
+/* Spinner */
+.spinner {
+  display: inline-block;
+  width: 20px; height: 20px;
+  border: 2px solid rgba(255,255,255,0.35);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+/* Toast notification */
+.toast {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+  background: var(--text-dark); color: white;
+  padding: 12px 24px; border-radius: var(--radius-md);
+  font-size: 0.85rem; z-index: 9999;
+  box-shadow: var(--shadow-premium);
+  animation: fadeInUp 0.3s ease;
+}
+.toast.success { background: var(--primary-color); }
+.toast.error   { background: var(--error); }
+
+/* Divider */
+.divider-row {
+  display: flex; align-items: center; gap: 12px; margin: 20px 0;
+  span { flex: 1; height: 1px; background: var(--divider); }
+  p { color: var(--text-ultralight); font-size: 0.75rem; }
+}
+
+/* Empty state */
+.empty-state {
+  padding: 40px 20px; display: flex; flex-direction: column;
+  align-items: center; gap: 12px; text-align: center;
+}
+.empty-state svg { opacity: 0.35; }
+.empty-state p { color: var(--text-muted); font-size: 0.9rem; }
+.empty-state span { color: var(--text-ultralight); font-size: 0.78rem; }
+
+/* Section title with accent bar */
+.section-heading {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 16px;
+
+  &::before {
+    content: '';
+    display: block; width: 4px; height: 18px;
+    background: var(--primary-color);
+    border-radius: var(--radius-full);
+    flex-shrink: 0;
+  }
+
+  h2 { font-size: 1rem; font-weight: 600; color: var(--text-dark); margin: 0; }
+}
+
+/* ===================== Scrollbar ===================== */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--primary-light); }
