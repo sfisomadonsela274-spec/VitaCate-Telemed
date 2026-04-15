@@ -8,7 +8,9 @@ import requests
 from kivy.logger import Logger
 from kivymd.app import MDApp
 
-TOKEN_REFRESH_ENDPOINT = "http://127.0.0.1:8000/api/users/token/refresh/"
+import os
+
+TOKEN_REFRESH_ENDPOINT = os.environ.get("VITACARE_API_URL", "http://127.0.0.1:8000") + "/api/users/token/refresh/"
 
 
 def _get_running_app():
