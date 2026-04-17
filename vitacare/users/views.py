@@ -267,3 +267,37 @@ def check_auth(request):
             'role': getattr(request.user, 'role', 'patient')
         }
     })
+
+
+class DoctorListView(APIView):
+    """Returns all CustomUser records with role='doctor' for chat/video room pairing."""
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        doctors = User.objects.filter(role='doctor').values(
+            'id', 'first_name', 'last_name', 'email'
+        )
+        data = [{
+            'id': d['id'],
+            'first_name': d['first_name'],
+            'last_name': d['last_name'],
+            'email': d['email'],
+            'specialty': 'General Practitioner',
+        } for d in doctors]
+        return Response(data, status=status.HTTP_200_OK)
+
+
+class PatientListView(APIView):
+    """Returns all CustomUser records with role='patient' for doctors to initiate chat."""
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        patients = User.objects.filter(role='patient').values(
+            'id', 'first_name', 'last_name', 'email'
+        )
+        data = [{
+            'id': p['id'],
+            'name': f"{p['first_name']} {p['last_name']}",
+            'email': p['email'],
+        } for p in patients]
+        return Response(data, status=status.HTTP_200_OK)

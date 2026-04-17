@@ -7,7 +7,7 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule],
   template: `
     <button
-      class="vita-btn"
+      class="vita-btn tap-button"
       [class.full]="fullWidth"
       [class.outline]="variant === 'outline'"
       [class.ghost]="variant === 'ghost'"
@@ -17,49 +17,69 @@ import { CommonModule } from '@angular/common';
       (click)="onClick.emit($event)">
       <span class="spinner" *ngIf="loading"></span>
       <ng-content *ngIf="!loading"></ng-content>
-      <span *ngIf="loading">Please wait…</span>
+      <span *ngIf="loading">Processing...</span>
     </button>
   `,
   styles: [`
     .vita-btn {
-      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      display: inline-flex; align-items: center; justify-content: center; gap: 12px;
       background: var(--primary-color);
       color: var(--surface-white);
-      border-radius: var(--radius-full);
-      padding: 13px 28px;
-      font-size: 0.9rem; font-weight: 600;
-      letter-spacing: 0.01em;
-      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
-      box-shadow: 0 4px 12px rgba(88,112,100,0.25);
+      border-radius: var(--radius-md);
+      padding: 0 32px;
+      font-size: 1rem; font-weight: 700;
+      letter-spacing: -0.01em;
+      transition: all var(--transition-base);
+      box-shadow: var(--shadow-soft);
+      border: 2px solid transparent;
+      white-space: nowrap;
     }
+    
     .vita-btn:hover:not(:disabled) {
       background: var(--primary-dark);
-      transform: translateY(-1px);
-      box-shadow: 0 6px 18px rgba(88,112,100,0.3);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-premium);
     }
-    .vita-btn:active:not(:disabled) { transform: translateY(1px); box-shadow: none; }
-    .vita-btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
+    
+    .vita-btn:active:not(:disabled) { 
+      transform: scale(0.97); 
+      box-shadow: var(--shadow-xs);
+    }
+    
+    .vita-btn:disabled { 
+      opacity: 0.4; cursor: not-allowed; 
+      filter: grayscale(0.5);
+    }
+    
     .vita-btn.full { width: 100%; }
+    
     .vita-btn.outline {
       background: transparent;
       color: var(--primary-color);
-      border: 1.5px solid var(--primary-color);
+      border-color: var(--primary-color);
       box-shadow: none;
     }
     .vita-btn.outline:hover:not(:disabled) { background: var(--primary-pale); }
+    
     .vita-btn.ghost {
       background: transparent; color: var(--primary-color); box-shadow: none;
     }
     .vita-btn.ghost:hover:not(:disabled) { background: var(--primary-pale); }
-    .vita-btn.danger { background: var(--error); box-shadow: 0 4px 12px rgba(225,90,90,0.25); }
-    .vita-btn.danger:hover:not(:disabled) { background: #c94545; }
-    .vita-btn.loading { pointer-events: none; }
+    
+    .vita-btn.danger { 
+      background: var(--error); 
+      box-shadow: 0 8px 24px rgba(214, 48, 49, 0.2); 
+    }
+    .vita-btn.danger:hover:not(:disabled) { background: #b32424; }
+    
+    .vita-btn.loading { opacity: 0.8; }
+    
     .spinner {
-      width: 16px; height: 16px;
-      border: 2px solid rgba(255,255,255,0.35);
+      width: 18px; height: 18px;
+      border: 3px solid rgba(255,255,255,0.3);
       border-top-color: white;
       border-radius: 50%;
-      animation: spin 0.7s linear infinite;
+      animation: spin 0.8s linear infinite;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
   `]

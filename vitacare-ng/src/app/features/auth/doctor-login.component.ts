@@ -26,7 +26,7 @@ import { AuthService } from '../../core/services/auth.service';
 
         <div class="header-section">
           <div class="icon-wrapper">
-            <svg width="48" height="48" viewBox="0 0 24 24" fill="var(--primary-color)" xmlns="http://www.w3.org/2000/svg">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="var(--secondary-color)" xmlns="http://www.w3.org/2000/svg">
               <path d="M8 3V5H4V9H2V11H4V15H8V17H10V15H14V17H16V15H20V11H22V9H20V5H16V3H14V5H10V3H8ZM10 7H14V9H16V13H14V15H10V13H8V9H10V7Z" />
               <path d="M11 10H13V12H11V10Z" fill="white"/>
             </svg>
@@ -106,7 +106,7 @@ import { AuthService } from '../../core/services/auth.service';
     .top-arc {
       width: 150vw;
       height: 60vh;
-      background-color: rgba(68, 89, 78, 0.05); /* Dark primary */
+      background-color: var(--secondary-pale); 
       top: -30vh;
       left: -25vw;
     }
@@ -138,7 +138,7 @@ import { AuthService } from '../../core/services/auth.service';
       transition: background-color 0.2s;
     }
     .back-btn:hover {
-      background-color: rgba(68, 89, 78, 0.1);
+      background-color: var(--secondary-pale);
     }
 
     .header-section {

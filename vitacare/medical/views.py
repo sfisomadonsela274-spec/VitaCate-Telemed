@@ -3,8 +3,8 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import PrescriptionSerializer, ConsultationSerializer
-from .models import Prescription, Consultation
+from .serializers import PrescriptionSerializer, ConsultationSerializer, VitalsSerializer
+from .models import Prescription, Consultation, Vitals
 from users.models import Doctor, CustomUser
 from appointments.models import Appointment
 
@@ -39,9 +39,28 @@ class DoctorCreatePrescriptionView(APIView):
         obj = Prescription.objects.create(
             appointment=appointment, doctor=doctor, patient=patient,
             medication=medication, dosage=request.data.get('dosage',''),
-            notes=request.data.get('notes','')
+            notes=request.data.get('notes',''),
+            signature_data=request.data.get('signature_data')
         )
         return Response({'message':'created','prescription_id': obj.id}, status=201)
+
+class PlayerVitalsView(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request):
+        patient = request.user
+        qs = Vitals.objects.filter(patient=patient).order_by('-timestamp')[:50]
+        serializer = VitalsSerializer(qs, many=True)
+        return Response(serializer.data, status=200)
+
+    def post(self, request):
+        patient = request.user
+        data = request.data.copy()
+        data['patient'] = patient.id
+        serializer = VitalsSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=201)
+        return Response(serializer.errors, status=400)
 
 class PatientConsultationsView(APIView):
     permission_classes = [IsAuthenticated]

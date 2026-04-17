@@ -103,6 +103,31 @@ class MyLatestAppointmentView(APIView):
             return Response({"error": "Internal server error"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
+class PatientAppointmentsListView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        try:
+            appointments = Appointment.objects.filter(patient=request.user).order_by('date', 'time')
+            if not appointments.exists():
+                return Response([], status=status.HTTP_200_OK)
+            
+            data = []
+            for a in appointments:
+                data.append({
+                    "id": a.id,
+                    "doctor_name": a.doctor_name,
+                    "date": a.date.isoformat(),
+                    "time": a.time.strftime("%H:%M:%S"),
+                    "status": "scheduled",
+                    "reason": a.reason or ""
+                })
+            return Response(data, status=status.HTTP_200_OK)
+        except Exception as exc:
+            logger.exception("Error in PatientAppointmentsListView.get")
+            return Response({"error": "Internal server error"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
 class DoctorAppointmentsListView(APIView):
     permission_classes = [AllowAny]  # could be IsAuthenticated if using tokens
 

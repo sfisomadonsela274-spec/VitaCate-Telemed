@@ -21,7 +21,7 @@ source venv/bin/activate
 # Install/update requirements
 echo "Installing requirements..."
 pip install --upgrade pip
-pip install django djangorestframework django-cors-headers djangorestframework-simplejwt requests stripe
+pip install django djangorestframework django-cors-headers djangorestframework-simplejwt requests stripe channels daphne
 
 # Run migrations
 echo "Running migrations..."

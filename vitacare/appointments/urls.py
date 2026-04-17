@@ -3,12 +3,13 @@ from .views import (
     BookAppointmentView,
     MyLatestAppointmentView,
     DoctorAppointmentsListView,
-
+    PatientAppointmentsListView,
     CompleteAppointmentView,
-    AppointmentDetailView  # Added missing import
+    AppointmentDetailView
 )
 
 urlpatterns = [
+    path('', PatientAppointmentsListView.as_view(), name='patient_appointments_list'),
     path('book/', BookAppointmentView.as_view(), name='book_appointment'),
     path('my-latest/', MyLatestAppointmentView.as_view(), name='my_latest_appointment'),
     path('doctor-list/', DoctorAppointmentsListView.as_view(), name='doctor_appointments_list'),

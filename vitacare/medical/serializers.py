@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Prescription, Consultation
+from .models import Prescription, Consultation, Vitals
 
 class PrescriptionSerializer(serializers.ModelSerializer):
     class Meta:
@@ -12,3 +12,9 @@ class ConsultationSerializer(serializers.ModelSerializer):
         model = Consultation
         fields = '__all__'
         read_only_fields = ('date',)
+
+class VitalsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Vitals
+        fields = '__all__'
+        read_only_fields = ('timestamp',)

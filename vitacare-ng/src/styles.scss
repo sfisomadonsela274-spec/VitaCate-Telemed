@@ -1,221 +1,161 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@400;500;600;700&display=swap');
 
-/* =============================================
-   VitaCare Design System — Soft Clinical Luxury
-   ============================================= */
+/* ========================================================
+   VitaCare Design System — Biophilic Zen (Hospital Edition)
+   Focus: Stress reduction, Accessibility, and Professionalism
+   ======================================================== */
 
 :root {
-  /* Brand Colors */
-  --primary-color:    #587064;
-  --primary-light:    #7f9c8f;
-  --primary-dark:     #44594e;
-  --primary-pale:     rgba(88, 112, 100, 0.08);
+  /* Biophilic Palette */
+  --primary-color:    #4A6759; /* Deep Sage - Calm & Trust */
+  --primary-light:    #7FA796; /* Soft Mint */
+  --primary-dark:     #354B41;
+  --primary-pale:     rgba(74, 103, 89, 0.08);
 
-  --secondary-color:  #f28b83;
-  --secondary-light:  #f9c4bf;
-  --secondary-dark:   #d45750;
-  --secondary-pale:   rgba(242, 139, 131, 0.08);
+  --secondary-color:  #6B8BA4; /* Slate Blue - Professional Resilience */
+  --secondary-light:  #95AFC2;
+  --secondary-dark:   #4A6072;
+  --secondary-pale:   rgba(107, 139, 164, 0.08);
 
-  --teal:             #5da69e;
-  --teal-pale:        rgba(93, 166, 158, 0.08);
-  --purple:           #9f90c6;
-  --purple-pale:      rgba(159, 144, 198, 0.08);
-  --gold:             #c9a834;
-  --gold-pale:        rgba(201, 168, 52, 0.08);
+  --accent-color:     #E9C46A; /* Warm Reassurance Gold */
+  --accent-pale:      rgba(233, 196, 106, 0.1);
 
-  /* Neutrals */
-  --background-cream: #fcfaf8;
-  --surface-white:    #ffffff;
-  --text-dark:        #444241;
-  --text-muted:       #7f7e7d;
-  --text-ultralight:  #bcbcbc;
-  --border-light:     rgba(88, 112, 100, 0.15);
-  --divider:          #f0eeeb;
+  --teal:             #5DA69E;
+  --purple:           #8B7EB1;
+  --coral:            #E76F51; /* Alert/Vital info */
 
-  /* Error */
-  --error:            #e15a5a;
+  /* Neutrals for Bedside Comfort */
+  --background-cream: #F8FAF9; /* Sage-tinted Off-white */
+  --surface-white:    #FFFFFF;
+  --text-dark:        #2D3436; /* High contrast but softer than black */
+  --text-muted:       #636E72;
+  --text-ultralight:  #B2BEC3;
+  --border-light:     rgba(74, 103, 114, 0.1);
+  --divider:          #EDF2F0;
 
-  /* Typography */
+  /* Messaging & Actions */
+  --bubble-me:        linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+  --bubble-peer:      #FFFFFF;
+  
+  /* Error/Help */
+  --error:            #D63031;
+  --emergency:        #E76F51;
+
+  /* Typography (Accessibility Focus) */
   --font-header: 'Poppins', -apple-system, sans-serif;
   --font-body:   'Inter', -apple-system, sans-serif;
+  --base-font-size: 16px;
 
-  /* Shadows */
-  --shadow-xs:      0 1px 4px rgba(68, 89, 78, 0.06);
-  --shadow-soft:    0 4px 14px rgba(68, 89, 78, 0.08);
-  --shadow-premium: 0 8px 32px rgba(68, 89, 78, 0.10);
-  --shadow-lifted:  0 16px 48px rgba(68, 89, 78, 0.14);
+  /* High-Tap Targets */
+  --min-tap-target: 56px;
 
-  /* Radii */
-  --radius-xs:  6px;
-  --radius-sm:  10px;
-  --radius-md:  16px;
-  --radius-lg:  24px;
-  --radius-xl:  32px;
+  /* Shadows (Softer Depth) */
+  --shadow-xs:      0 2px 8px rgba(0,0,0,0.04);
+  --shadow-soft:    0 8px 24px rgba(74, 103, 89, 0.08);
+  --shadow-premium: 0 12px 48px rgba(74, 103, 89, 0.12);
+  --shadow-emergency: 0 8px 32px rgba(231, 111, 81, 0.3);
+
+  /* Radii (Organic Pebble Shapes) */
+  --radius-sm:  12px;
+  --radius-md:  20px;
+  --radius-lg:  28px;
+  --radius-xl:  40px;
   --radius-full: 9999px;
 
   /* Transitions */
-  --transition-fast: 0.15s ease;
-  --transition-base: 0.2s ease;
-  --transition-slow: 0.35s ease;
+  --transition-base: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* ===================== Reset ===================== */
+/* ===================== Reset & Base ===================== */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-html { scroll-behavior: smooth; }
+html { 
+  scroll-behavior: smooth;
+  font-size: var(--base-font-size);
+}
 
 body {
   background-color: var(--background-cream);
   color: var(--text-dark);
   font-family: var(--font-body);
-  line-height: 1.55;
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1, h2, h3, h4 {
   font-family: var(--font-header);
-  font-weight: 600;
+  font-weight: 700;
   color: var(--primary-dark);
-  line-height: 1.25;
+  letter-spacing: -0.02em;
 }
 
-a { text-decoration: none; color: var(--primary-color); transition: color var(--transition-base); }
-a:hover { color: var(--secondary-color); }
-
-button { font-family: var(--font-header); cursor: pointer; border: none; }
-input, textarea, select { font-family: var(--font-body); }
-
-/* ===================== Page Transitions ===================== */
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(16px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-@keyframes slideInRight {
-  from { opacity: 0; transform: translateX(24px); }
-  to   { opacity: 1; transform: translateX(0); }
-}
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50%       { opacity: 0.5; }
-}
-@keyframes shimmer {
-  0%   { background-position: -400px 0; }
-  100% { background-position: 400px 0; }
-}
-@keyframes spin {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
-}
-@keyframes scaleIn {
-  from { opacity: 0; transform: scale(0.96); }
-  to   { opacity: 1; transform: scale(1); }
+/* ===================== Bedside Animations ===================== */
+@keyframes pebbleBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
 }
 
-/* ===================== Layout Utilities ===================== */
-.page-animate   { animation: fadeInUp 0.4s ease both; }
-.card-animate   { animation: scaleIn 0.3s ease both; }
-.slide-in-right { animation: slideInRight 0.35s ease both; }
+@keyframes pulseHelp {
+  0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(231, 111, 81, 0.7); }
+  70% { transform: scale(1.05); box-shadow: 0 0 0 15px rgba(231, 111, 81, 0); }
+  100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(231, 111, 81, 0); }
+}
 
-/* Stagger children */
-.stagger > *:nth-child(1) { animation-delay: 0.05s; }
-.stagger > *:nth-child(2) { animation-delay: 0.10s; }
-.stagger > *:nth-child(3) { animation-delay: 0.15s; }
-.stagger > *:nth-child(4) { animation-delay: 0.20s; }
-.stagger > *:nth-child(5) { animation-delay: 0.25s; }
+.page-animate { animation: fadeIn 0.5s ease both; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-/* ===================== Shared Components ===================== */
+/* ===================== Shared Bedside UX Components ===================== */
 
-/* Premium Card */
+/* High-Accessibility Cards */
 .vitacard {
   background: var(--surface-white);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-soft);
-  padding: 20px;
+  padding: 24px;
+  border: 1px solid var(--border-light);
   transition: transform var(--transition-base), box-shadow var(--transition-base);
 }
-.vitacard:hover { transform: translateY(-2px); box-shadow: var(--shadow-premium); }
+.vitacard.hover:hover { transform: translateY(-4px); box-shadow: var(--shadow-premium); }
 
-/* Badge chip */
-.chip {
-  display: inline-flex; align-items: center;
-  padding: 4px 10px; border-radius: var(--radius-full);
-  font-size: 0.7rem; font-weight: 600; text-transform: capitalize;
+/* Bedside Quick Button */
+.tap-button {
+  min-height: var(--min-tap-target);
+  padding: 0 20px;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  display: flex; align-items: center; justify-content: center;
+  transition: all var(--transition-base);
 }
-.chip-green   { background: rgba(88,112,100,0.1); color: var(--primary-color); }
-.chip-coral   { background: rgba(242,139,131,0.1); color: var(--secondary-dark); }
-.chip-teal    { background: rgba(93,166,158,0.1);  color: var(--teal); }
-.chip-purple  { background: rgba(159,144,198,0.1); color: var(--purple); }
-.chip-gold    { background: rgba(201,168,52,0.1);  color: var(--gold); }
+.tap-button:active { transform: scale(0.96); opacity: 0.9; }
 
-/* Skeleton loader */
-.skeleton {
-  background: linear-gradient(90deg, #f0eeeb 25%, #e8e5e1 50%, #f0eeeb 75%);
-  background-size: 400px 100%;
-  animation: shimmer 1.4s infinite;
-  border-radius: var(--radius-sm);
-}
-
-/* Spinner */
-.spinner {
-  display: inline-block;
-  width: 20px; height: 20px;
-  border: 2px solid rgba(255,255,255,0.35);
-  border-top-color: white;
+/* Emergency FAB */
+.emergency-fab {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 72px;
+  height: 72px;
   border-radius: 50%;
-  animation: spin 0.7s linear infinite;
+  background: var(--emergency);
+  color: white;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: var(--shadow-emergency);
+  z-index: 1000;
+  cursor: pointer;
+  animation: pulseHelp 2s infinite;
 }
 
-/* Toast notification */
-.toast {
-  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
-  background: var(--text-dark); color: white;
-  padding: 12px 24px; border-radius: var(--radius-md);
-  font-size: 0.85rem; z-index: 9999;
-  box-shadow: var(--shadow-premium);
-  animation: fadeInUp 0.3s ease;
-}
-.toast.success { background: var(--primary-color); }
-.toast.error   { background: var(--error); }
-
-/* Divider */
-.divider-row {
-  display: flex; align-items: center; gap: 12px; margin: 20px 0;
-  span { flex: 1; height: 1px; background: var(--divider); }
-  p { color: var(--text-ultralight); font-size: 0.75rem; }
+/* Status Indicator */
+.connection-pill {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 6px 14px; border-radius: var(--radius-full);
+  background: rgba(0,0,0,0.03); font-size: 0.75rem; font-weight: 700;
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: #94a3b8; }
+  &.open { color: var(--primary-color); background: var(--primary-pale); .dot { background: var(--primary-color); box-shadow: 0 0 8px var(--primary-light); } }
 }
 
-/* Empty state */
-.empty-state {
-  padding: 40px 20px; display: flex; flex-direction: column;
-  align-items: center; gap: 12px; text-align: center;
-}
-.empty-state svg { opacity: 0.35; }
-.empty-state p { color: var(--text-muted); font-size: 0.9rem; }
-.empty-state span { color: var(--text-ultralight); font-size: 0.78rem; }
-
-/* Section title with accent bar */
-.section-heading {
-  display: flex; align-items: center; gap: 10px;
-  margin-bottom: 16px;
-
-  &::before {
-    content: '';
-    display: block; width: 4px; height: 18px;
-    background: var(--primary-color);
-    border-radius: var(--radius-full);
-    flex-shrink: 0;
-  }
-
-  h2 { font-size: 1rem; font-weight: 600; color: var(--text-dark); margin: 0; }
-}
-
-/* ===================== Scrollbar ===================== */
-::-webkit-scrollbar { width: 4px; height: 4px; }
+/* Scrollbars */
+::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 4px; }
+::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 10px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--primary-light); }

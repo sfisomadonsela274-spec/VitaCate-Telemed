@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import DoctorLoginView
+from .views import DoctorLoginView, DoctorListView
 from .views import get_doctor_id
 from .views import (
     RegisterView,

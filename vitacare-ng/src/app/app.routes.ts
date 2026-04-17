@@ -22,6 +22,10 @@ export const routes: Routes = [
     loadComponent: () => import('./features/patient/patient-prescriptions.component').then(m => m.PatientPrescriptionsComponent) },
   { path: 'patient-consultations',
     loadComponent: () => import('./features/patient/patient-consultations.component').then(m => m.PatientConsultationsComponent) },
+  { path: 'patient-chat',
+    loadComponent: () => import('./features/chat/patient-chat.component').then(m => m.PatientChatComponent) },
+  { path: 'video-call/:id',
+    loadComponent: () => import('./features/video/video-call.component').then(m => m.VideoCallComponent) },
 
   // ── Doctor ────────────────────────────────────────────────
   { path: 'doctor-home',
@@ -29,9 +33,13 @@ export const routes: Routes = [
   { path: 'doctor-appointments',
     loadComponent: () => import('./features/doctor/doctor-appointments.component').then(m => m.DoctorAppointmentsComponent) },
   { path: 'appointment-detail',
-    loadComponent: () => import('./features/doctor/doctor-appointments.component').then(m => m.DoctorAppointmentsComponent) },
+    loadComponent: () => import('./features/doctor/appointment-detail.component').then(m => m.AppointmentDetailComponent) },
   { path: 'add-consultation',
     loadComponent: () => import('./features/doctor/add-consultation.component').then(m => m.AddConsultationComponent) },
+  { path: 'add-prescription',
+    loadComponent: () => import('./features/doctor/add-prescription.component').then(m => m.AddPrescriptionComponent) },
+  { path: 'doctor-chat',
+    loadComponent: () => import('./features/chat/doctor-chat.component').then(m => m.DoctorChatComponent) },
 
   // ── Redirects ─────────────────────────────────────────────
   { path: '',   redirectTo: '/welcome', pathMatch: 'full' },

@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { CONFIG } from '../config';
 
 export interface AuthTokens { access: string; refresh: string; role: string; }
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private base = 'http://localhost:8000/api/users';
+  private base = `${CONFIG.API_BASE}/users`;
   private tokensKey = 'vitacare_tokens';
 
   private _tokens = new BehaviorSubject<AuthTokens | null>(this.storedTokens());
@@ -18,6 +19,14 @@ export class AuthService {
   get isLoggedIn() { return !!this._tokens.value; }
   get currentRole() { return this._tokens.value?.role ?? null; }
   get accessToken() { return this._tokens.value?.access ?? null; }
+  get userId() {
+    const access = this.accessToken;
+    if (!access) return null;
+    try {
+      const payload = JSON.parse(atob(access.split('.')[1]));
+      return payload.user_id || payload.id || payload.sub || null;
+    } catch { return null; }
+  }
 
   private storedTokens(): AuthTokens | null {
     try { const r = localStorage.getItem(this.tokensKey); return r ? JSON.parse(r) : null; }

@@ -98,14 +98,14 @@ import { AuthService } from '../../core/services/auth.service';
     .top-arc {
       width: 120vw;
       height: 70vh;
-      background-color: rgba(88, 112, 100, 0.06); 
+      background-color: var(--primary-pale); 
       top: -20vh;
       right: -25vw;
     }
     .bottom-arc {
       width: 80vw;
       height: 50vh;
-      background-color: rgba(242, 139, 131, 0.04); 
+      background-color: var(--secondary-pale); 
       bottom: -10vh;
       left: -30vw;
     }
@@ -201,14 +201,14 @@ import { AuthService } from '../../core/services/auth.service';
 
     .signup-link {
       text-align: center;
-      font-size: 0.8rem;
-      color: #7f7e7d;
+      font-size: 0.9rem;
+      color: var(--text-muted);
       
       a {
         color: var(--secondary-color);
-        font-weight: 600;
+        font-weight: 700;
         cursor: pointer;
-        font-family: var(--font-header);
+        padding-left: 4px;
       }
     }
 

@@ -74,14 +74,14 @@ import { PrimaryButtonComponent } from '../../shared/components/primary-button.c
     .top-arc {
       width: 150vw;
       height: 80vh;
-      background-color: rgba(88, 112, 100, 0.08); /* Sage tint */
+      background-color: var(--primary-pale); 
       top: -40vh;
       left: -25vw;
     }
     .bottom-arc {
       width: 120vw;
       height: 60vh;
-      background-color: rgba(242, 139, 131, 0.05); /* Coral tint */
+      background-color: var(--secondary-pale); 
       bottom: -20vh;
       right: -10vw;
     }
@@ -139,8 +139,10 @@ import { PrimaryButtonComponent } from '../../shared/components/primary-button.c
     }
     
     .subtitle {
-      color: var(--primary-light);
+      color: var(--primary-color);
+      opacity: 0.8;
       font-size: 1.1rem;
+      font-weight: 500;
     }
 
     .card-content {
