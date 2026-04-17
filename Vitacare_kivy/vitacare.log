@@ -1,0 +1,133 @@
+
+2026-04-15 14:13:47,721 - kivy - INFO - Kivy: v2.3.1
+2026-04-15 14:13:47,722 - kivy - INFO - Logger: Record log in /home/sfiso/.kivy/logs/kivy_26-04-15_21.txt
+2026-04-15 14:13:47,722 - kivy - INFO - Kivy: Installed at "/home/sfiso/VitaCate-Telemed/venv/lib/python3.12/site-packages/kivy/__init__.py"
+2026-04-15 14:13:47,722 - kivy - INFO - Python: v3.12.3 (main, Mar  3 2026, 12:15:18) [GCC 13.3.0]
+2026-04-15 14:13:47,722 - kivy - INFO - Python: Interpreter at "/home/sfiso/VitaCate-Telemed/venv/bin/python"
+2026-04-15 14:13:47,723 - kivy - INFO - Logger: Purge log fired. Processing...
+2026-04-15 14:13:47,723 - kivy - INFO - Logger: Purge finished!
+2026-04-15 14:13:47,725 - kivy - INFO - Factory: 195 symbols loaded
+2026-04-15 14:13:47,901 - kivy - INFO - Image: Providers: img_tex, img_dds, img_sdl2, img_pil (img_ffpyplayer ignored)
+2026-04-15 14:13:47,911 - kivy - INFO - KivyMD: 1.2.0, git-Unknown, 2026-04-15 (installed at "/home/sfiso/VitaCate-Telemed/venv/lib/python3.12/site-packages/kivymd/__init__.py")
+2026-04-15 14:13:47,911 - kivy - WARNING - KivyMD: Version 1.2.0 is deprecated and is no longer supported. Use KivyMD version 2.0.0 from the master branch (pip install https://github.com/kivymd/KivyMD/archive/master.zip)
+2026-04-15 14:13:47,914 - kivy - INFO - Text: Provider: sdl2
+2026-04-15 14:13:47,930 - kivy - INFO - Window: Provider: sdl2
+2026-04-15 14:13:48,287 - kivy - INFO - GL: Using the "OpenGL" graphics system
+2026-04-15 14:13:48,290 - kivy - INFO - GL: Backend used <sdl2>
+2026-04-15 14:13:48,292 - kivy - INFO - GL: OpenGL version <b'4.6.0 NVIDIA 535.288.01'>
+2026-04-15 14:13:48,293 - kivy - INFO - GL: OpenGL vendor <b'NVIDIA Corporation'>
+2026-04-15 14:13:48,295 - kivy - INFO - GL: OpenGL renderer <b'NVIDIA GeForce GTX 1070/PCIe/SSE2'>
+2026-04-15 14:13:48,295 - kivy - INFO - GL: OpenGL parsed version: 4, 6
+2026-04-15 14:13:48,296 - kivy - INFO - GL: Shading version <b'4.60 NVIDIA'>
+2026-04-15 14:13:48,296 - kivy - INFO - GL: Texture max size <32768>
+2026-04-15 14:13:48,296 - kivy - INFO - GL: Texture max units <32>
+2026-04-15 14:13:48,314 - kivy - INFO - Window: auto add sdl2 input provider
+2026-04-15 14:13:48,316 - kivy - INFO - Window: virtual keyboard not allowed, single mode, not docked
+2026-04-15 14:13:48,318 - __main__ - INFO - Starting VitaCare application
+2026-04-15 14:13:48,320 - __main__ - INFO - Custom fonts registered successfully
+2026-04-15 14:13:48,329 - __main__ - INFO - Successfully loaded KV file: design_system.kv
+2026-04-15 14:13:48,366 - __main__ - INFO - Successfully loaded KV file: welcome_screen.kv
+2026-04-15 14:13:48,387 - __main__ - INFO - Successfully loaded KV file: patient_login.kv
+2026-04-15 14:13:48,394 - __main__ - INFO - Successfully loaded KV file: doctor_login.kv
+2026-04-15 14:13:48,403 - __main__ - INFO - Successfully loaded KV file: sign_up.kv
+2026-04-15 14:13:48,409 - __main__ - INFO - Successfully loaded KV file: forgot_password_email.kv
+2026-04-15 14:13:48,414 - __main__ - INFO - Successfully loaded KV file: forgot_password_code.kv
+2026-04-15 14:13:48,422 - __main__ - INFO - Successfully loaded KV file: reset_password.kv
+2026-04-15 14:13:48,445 - __main__ - INFO - Successfully loaded KV file: patient_home.kv
+2026-04-15 14:13:48,455 - __main__ - INFO - Successfully loaded KV file: book_appointment.kv
+2026-04-15 14:13:48,469 - __main__ - INFO - Successfully loaded KV file: doctor_home.kv
+2026-04-15 14:13:48,472 - __main__ - INFO - Successfully loaded KV file: doctor_view_appointments.kv
+2026-04-15 14:13:48,477 - __main__ - INFO - Successfully loaded KV file: appointment_detail.kv
+2026-04-15 14:13:48,484 - __main__ - INFO - Successfully loaded KV file: doctor_add_prescription.kv
+2026-04-15 14:13:48,490 - __main__ - INFO - Successfully loaded KV file: doctor_add_consultation.kv
+2026-04-15 14:13:48,493 - __main__ - INFO - Successfully loaded KV file: message_bubble.kv
+2026-04-15 14:13:48,511 - kivy - INFO - Clipboard: Provider: sdl2(['clipboard_xclip', 'clipboard_xsel', 'clipboard_dbusklipper', 'clipboard_gtk3'] ignored)
+2026-04-15 14:13:48,517 - kivy - CRITICAL - Cutbuffer: Unable to find any valuable Cutbuffer provider. Please enable debug logging (e.g. add -d if running from the command line, or change the log level in the config) and re-run your app to identify potential causes
+xclip - FileNotFoundError: [Errno 2] No such file or directory: 'xclip'
+  File "/home/sfiso/VitaCate-Telemed/venv/lib/python3.12/site-packages/kivy/core/__init__.py", line 59, in core_select_lib
+    mod = importlib.__import__(name='{2}.{0}.{1}'.format(
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1466, in __import__
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 995, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "/home/sfiso/VitaCate-Telemed/venv/lib/python3.12/site-packages/kivy/core/clipboard/clipboard_xclip.py", line 17, in <module>
+    p = subprocess.Popen(['xclip', '-version'], stdout=subprocess.PIPE,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "/usr/lib/python3.12/subprocess.py", line 1955, in _execute_child
+    raise child_exception_type(errno_num, err_msg, err_filename)
+
+xsel - FileNotFoundError: [Errno 2] No such file or directory: 'xsel'
+  File "/home/sfiso/VitaCate-Telemed/venv/lib/python3.12/site-packages/kivy/core/__init__.py", line 59, in core_select_lib
+    mod = importlib.__import__(name='{2}.{0}.{1}'.format(
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1466, in __import__
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 995, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "/home/sfiso/VitaCate-Telemed/venv/lib/python3.12/site-packages/kivy/core/clipboard/clipboard_xsel.py", line 15, in <module>
+    p = subprocess.Popen(['xsel', '--version'], stdout=subprocess.PIPE)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "/usr/lib/python3.12/subprocess.py", line 1955, in _execute_child
+    raise child_exception_type(errno_num, err_msg, err_filename)
+
+2026-04-15 14:13:48,600 - __main__ - INFO - Successfully loaded KV file: chat.kv
+2026-04-15 14:13:48,606 - __main__ - INFO - Successfully loaded KV file: video_call.kv
+2026-04-15 14:13:48,609 - __main__ - INFO - Successfully loaded KV file: patient_prescriptions.kv
+2026-04-15 14:13:48,612 - __main__ - INFO - Successfully loaded KV file: patient_consultations.kv
+2026-04-15 14:13:48,613 - __main__ - INFO - Successfully loaded KV file: main.kv
+2026-04-15 14:13:48,762 - kivy - INFO - GL: NPOT texture support is available
+2026-04-15 14:13:48,858 - __main__ - DEBUG - Added screen: welcome
+2026-04-15 14:13:48,992 - __main__ - DEBUG - Added screen: patient_login
+2026-04-15 14:13:49,099 - __main__ - DEBUG - Added screen: doctor_login
+2026-04-15 14:13:49,308 - __main__ - DEBUG - Added screen: sign_up
+2026-04-15 14:13:49,354 - __main__ - DEBUG - Added screen: forgot_password_email
+2026-04-15 14:13:49,404 - __main__ - DEBUG - Added screen: forgot_password_code
+2026-04-15 14:13:49,534 - __main__ - DEBUG - Added screen: reset_password
+2026-04-15 14:13:49,702 - __main__ - DEBUG - Added screen: patient_home
+2026-04-15 14:13:49,904 - __main__ - DEBUG - Added screen: book_appointment
+2026-04-15 14:13:50,030 - kivy - WARNING - Deprecated property "<NumericProperty name=width_mult>" of object "<kivymd.uix.menu.menu.MDDropdownMenu object at 0x7c7a7054d320>" has been set, it will be removed in a future version
+2026-04-15 14:13:50,038 - __main__ - DEBUG - Added screen: doctor_home
+2026-04-15 14:13:50,084 - __main__ - DEBUG - Added screen: doctor_view_appointments
+2026-04-15 14:13:50,159 - __main__ - DEBUG - Added screen: appointment_detail
+2026-04-15 14:13:50,371 - __main__ - DEBUG - Added screen: doctor_add_prescription
+2026-04-15 14:13:50,520 - __main__ - DEBUG - Added screen: doctor_add_consultation
+2026-04-15 14:13:50,593 - __main__ - DEBUG - Added screen: doctor_chat
+2026-04-15 14:13:50,650 - __main__ - DEBUG - Added screen: patient_chat
+2026-04-15 14:13:50,776 - __main__ - DEBUG - Added screen: video_call
+2026-04-15 14:13:50,807 - __main__ - DEBUG - Added screen: patient_prescriptions
+2026-04-15 14:13:50,839 - __main__ - DEBUG - Added screen: patient_consultations
+2026-04-15 14:13:50,840 - __main__ - INFO - Application initialized successfully
+2026-04-15 14:13:50,881 - kivy - INFO - Base: Start application main loop
+2026-04-15 14:13:51,340 - kivy - INFO - Base: Leaving application in progress...
+2026-04-15 14:13:51,341 - __main__ - CRITICAL - Unhandled exception: 'border_radius' must have 4, got 1
+Traceback (most recent call last):
+  File "/home/sfiso/VitaCate-Telemed/Vitacare_kivy/main.py", line 220, in main
+    return app.run()
+           ^^^^^^^^^
+  File "/home/sfiso/VitaCate-Telemed/venv/lib/python3.12/site-packages/kivy/app.py", line 956, in run
+    runTouchApp()
+  File "/home/sfiso/VitaCate-Telemed/venv/lib/python3.12/site-packages/kivy/base.py", line 574, in runTouchApp
+    EventLoop.mainloop()
+  File "/home/sfiso/VitaCate-Telemed/venv/lib/python3.12/site-packages/kivy/base.py", line 339, in mainloop
+    self.idle()
+  File "/home/sfiso/VitaCate-Telemed/venv/lib/python3.12/site-packages/kivy/base.py", line 387, in idle
+    Builder.sync()
+  File "/home/sfiso/VitaCate-Telemed/venv/lib/python3.12/site-packages/kivy/lang/builder.py", line 797, in sync
+    call_fn(next_args[:-1], None, None)
+  File "/home/sfiso/VitaCate-Telemed/venv/lib/python3.12/site-packages/kivy/lang/builder.py", line 72, in call_fn
+    setattr(element, key, e_value)
+  File "kivy/graphics/boxshadow.pyx", line 422, in kivy.graphics.boxshadow.BoxShadow.border_radius.__set__
+  File "kivy/graphics/boxshadow.pyx", line 332, in kivy.graphics.boxshadow.BoxShadow._check_iter
+ValueError: 'border_radius' must have 4, got 1
+2026-04-15 14:13:51,343 - __main__ - INFO - VitaCare application has exited
