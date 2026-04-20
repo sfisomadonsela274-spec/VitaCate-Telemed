@@ -3,7 +3,6 @@ vitacare-ng/node_modules
 vitacare/venv
 vitacare/__pycache__
 vitacare/vitacare/__pycache__
-vitacare/requirements.txt
 
 # Build artifacts
 vitacare-ng/.angular
