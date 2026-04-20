@@ -22,21 +22,33 @@ async function seed() {
   ];
 
   for (const doc of doctors) {
-    console.log(`Creating doctor: ${doc.full_name}...`);
-    const { data: authUser, error: authError } = await supabase.auth.admin.createUser({
-      email: doc.email,
-      password: doc.password,
-      email_confirmed: true,
-      user_metadata: { role: 'doctor', full_name: doc.full_name }
-    });
+    console.log(`Checking/Creating doctor: ${doc.full_name}...`);
+    
+    // Check if user exists
+    const { data: userData } = await supabase.auth.admin.listUsers();
+    const existingUser = userData?.users.find(u => u.email === doc.email);
+    
+    let userId;
+    if (existingUser) {
+      console.log(`User ${doc.email} already exists. Updating...`);
+      userId = existingUser.id;
+    } else {
+      const { data: authUser, error: authError } = await supabase.auth.admin.createUser({
+        email: doc.email,
+        password: doc.password,
+        email_confirmed: true,
+        user_metadata: { role: 'doctor', full_name: doc.full_name }
+      });
 
-    if (authError) {
-      console.warn(`Warning: Could not create auth user for ${doc.email}: ${authError.message}`);
-      continue;
+      if (authError) {
+        console.warn(`Warning: Could not create auth user for ${doc.email}: ${authError.message}`);
+        continue;
+      }
+      userId = authUser.user.id;
     }
 
     const { error: dbError } = await supabase.from('doctors').upsert({
-      id: authUser.user.id,
+      id: userId,
       email: doc.email,
       full_name: doc.full_name,
       license_number: doc.license,
@@ -54,29 +66,40 @@ async function seed() {
   ];
 
   for (const pat of patients) {
-    console.log(`Creating patient: ${pat.first} ${pat.last}...`);
-    const { data: authUser, error: authError } = await supabase.auth.admin.createUser({
-      email: pat.email,
-      password: pat.password,
-      email_confirmed: true,
-      user_metadata: { role: 'patient', first_name: pat.first, last_name: pat.last }
-    });
+    console.log(`Checking/Creating patient: ${pat.first} ${pat.last}...`);
+    
+    const { data: userData } = await supabase.auth.admin.listUsers();
+    const existingUser = userData?.users.find(u => u.email === pat.email);
+    
+    let userId;
+    if (existingUser) {
+      console.log(`User ${pat.email} already exists.`);
+      userId = existingUser.id;
+    } else {
+        const { data: authUser, error: authError } = await supabase.auth.admin.createUser({
+          email: pat.email,
+          password: pat.password,
+          email_confirmed: true,
+          user_metadata: { role: 'patient', first_name: pat.first, last_name: pat.last }
+        });
 
-    if (authError) {
-      console.warn(`Warning: Could not create auth user for ${pat.email}: ${authError.message}`);
-      continue;
+        if (authError) {
+          console.warn(`Warning: Could not create auth user for ${pat.email}: ${authError.message}`);
+          continue;
+        }
+        userId = authUser.user.id;
     }
     
-    // Profile is auto-created by trigger in schema.sql
-    // But we might want to update it with names if the trigger doesn't handle metadata fully
-    await supabase.from('profiles').update({
+    await supabase.from('profiles').upsert({
+      id: userId,
+      email: pat.email,
       first_name: pat.first,
-      last_name: pat.last
-    }).eq('id', authUser.user.id);
+      last_name: pat.last,
+      role: 'patient'
+    });
   }
 
   console.log('--- Seeding Complete ---');
-  console.log('Note: Appointments and other records can be added through the app UI.');
 }
 
 seed().catch(err => console.error(err));
