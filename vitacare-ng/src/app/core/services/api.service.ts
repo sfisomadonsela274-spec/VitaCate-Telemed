@@ -1,48 +1,240 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { CONFIG } from '../config';
+import { Observable, from, of } from 'rxjs';
+import { map, switchMap, catchError } from 'rxjs/operators';
+import { supabase } from '../supabase';
 
 @Injectable({ providedIn: 'root' })
 export class ApiService {
-  private base = CONFIG.API_BASE;
+  constructor() {}
 
-  constructor(private http: HttpClient) {}
+  // ─── Appointments ────────────────────────────────────────────
 
-  // Patient endpoints
-  getAppointments(): Observable<unknown[]> {
-    return this.http.get<unknown[]>(`${this.base}/appointments/`);
+  getAppointments(): Observable<any[]> {
+    return from(
+      supabase
+        .from('appointments')
+        .select('*, doctors(full_name), profiles(id, first_name, last_name)')
+        .order('date', { ascending: false })
+    ).pipe(map(r => r.data ?? []));
   }
-  bookAppointment(data: Record<string, unknown>): Observable<unknown> {
-    return this.http.post(`${this.base}/appointments/`, data);
+
+  bookAppointment(data: {
+    doctor_id: string;
+    date: string;
+    time: string;
+    reason?: string;
+  }): Observable<any> {
+    return from(
+      supabase.functions.invoke('book-appointment', { body: data })
+    ).pipe(
+      switchMap(({ data: result, error }) => {
+        if (error) throw error;
+        return of(result);
+      }),
+      catchError(err => { throw err; })
+    );
   }
-  getPrescriptions(): Observable<unknown[]> {
-    return this.http.get<unknown[]>(`${this.base}/prescriptions/`);
+
+  getMyLatestAppointment(): Observable<any> {
+    const userId = this.getCurrentUserId();
+    return from(
+      supabase
+        .from('appointments')
+        .select('*')
+        .eq('patient_id', userId)
+        .order('date', { ascending: false })
+        .limit(1)
+        .single()
+    ).pipe(map(r => r.data));
   }
-  getConsultations(): Observable<unknown[]> {
-    return this.http.get<unknown[]>(`${this.base}/consultations/`);
+
+  getDoctorAppointments(doctorId: string): Observable<any[]> {
+    return from(
+      supabase
+        .from('appointments')
+        .select('*, profiles(first_name, last_name)')
+        .eq('doctor_id', doctorId)
+        .order('date', { ascending: false })
+    ).pipe(map(r => r.data ?? []));
   }
-  getPatientDashboard(): Observable<unknown> {
-    return this.http.get(`${this.base}/patient/dashboard/`);
+
+  completeAppointment(appointmentId: string): Observable<any> {
+    return from(
+      supabase.functions.invoke('complete-appointment', {
+        body: { appointment_id: appointmentId }
+      })
+    ).pipe(
+      switchMap(({ data, error }) => {
+        if (error) throw error;
+        return of(data);
+      }),
+      catchError(err => { throw err; })
+    );
   }
+
+  // ─── Doctors ─────────────────────────────────────────────────
+
+  getDoctors(): Observable<any[]> {
+    return from(
+      supabase.from('doctors').select('*')
+    ).pipe(map(r => r.data ?? []));
+  }
+
+  getDoctorId(email: string): Observable<string | null> {
+    return from(
+      supabase
+        .from('doctors')
+        .select('id')
+        .eq('email', email)
+        .single()
+    ).pipe(
+      map(r => r.data?.id ?? null),
+      catchError(() => of(null))
+    );
+  }
+
+  // ─── Prescriptions ───────────────────────────────────────────
+
+  getPrescriptions(): Observable<any[]> {
+    const userId = this.getCurrentUserId();
+    return from(
+      supabase
+        .from('prescriptions')
+        .select('*, doctors(full_name)')
+        .eq('patient_id', userId)
+        .order('date_issued', { ascending: false })
+    ).pipe(map(r => r.data ?? []));
+  }
+
+  addPrescription(data: {
+    doctor_id: string;
+    patient_id: string;
+    appointment_id?: string;
+    medication: string;
+    dosage: string;
+    notes?: string;
+  }): Observable<any> {
+    return from(
+      supabase.functions.invoke('add-prescription', { body: data })
+    ).pipe(
+      switchMap(({ data: result, error }) => {
+        if (error) throw error;
+        return of(result);
+      }),
+      catchError(err => { throw err; })
+    );
+  }
+
+  // ─── Consultations ──────────────────────────────────────────
+
+  getConsultations(): Observable<any[]> {
+    const userId = this.getCurrentUserId();
+    return from(
+      supabase
+        .from('consultations')
+        .select('*, doctors(full_name)')
+        .eq('patient_id', userId)
+        .order('date', { ascending: false })
+    ).pipe(map(r => r.data ?? []));
+  }
+
+  addConsultation(data: {
+    doctor_id: string;
+    patient_id: string;
+    appointment_id?: string;
+    summary: string;
+    follow_up?: string;
+  }): Observable<any> {
+    return from(
+      supabase.functions.invoke('add-consultation', { body: data })
+    ).pipe(
+      switchMap(({ data: result, error }) => {
+        if (error) throw error;
+        return of(result);
+      }),
+      catchError(err => { throw err; })
+    );
+  }
+
+  // ─── Vitals ──────────────────────────────────────────────────
+
+  getVitals(): Observable<any[]> {
+    const userId = this.getCurrentUserId();
+    return from(
+      supabase
+        .from('vitals')
+        .select('*, doctors(full_name)')
+        .eq('patient_id', userId)
+        .order('timestamp', { ascending: false })
+        .limit(20)
+    ).pipe(map(r => r.data ?? []));
+  }
+
+  recordVitals(data: {
+    heart_rate: number;
+    spo2: number;
+    temperature: number;
+    systolic: number;
+    diastolic: number;
+  }): Observable<any> {
+    return from(
+      supabase
+        .from('vitals')
+        .insert({ ...data, patient_id: this.getCurrentUserId() })
+        .select()
+        .single()
+    ).pipe(
+      switchMap(r => r.error ? Promise.reject(r.error) : of(r.data)),
+      catchError(err => { throw err; })
+    );
+  }
+
+  // ─── Patients / Dashboard ────────────────────────────────────
+
   getPatients(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.base}/patients/`);
+    return from(
+      supabase
+        .from('profiles')
+        .select('id, email, first_name, last_name, phone')
+        .eq('role', 'patient')
+    ).pipe(map(r => r.data ?? []));
   }
 
-  // Doctor endpoints
-  getDoctorDashboard(): Observable<unknown> {
-    return this.http.get(`${this.base}/doctor/dashboard/`);
+  getPatientDashboard(): Observable<any> {
+    const userId = this.getCurrentUserId();
+    return from(
+      supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', userId)
+        .single()
+    ).pipe(
+      switchMap(r => r.error ? Promise.reject(r.error) : of(r.data)),
+      catchError(err => { throw err; })
+    );
   }
-  getDoctorAppointments(): Observable<unknown[]> {
-    return this.http.get<unknown[]>(`${this.base}/doctor/appointments/doctor-list/`);
+
+  getDoctorDashboard(): Observable<any> {
+    const userId = this.getCurrentUserId();
+    return from(
+      supabase
+        .from('doctors')
+        .select('*')
+        .eq('id', userId)
+        .single()
+    ).pipe(
+      switchMap(r => r.error ? Promise.reject(r.error) : of(r.data)),
+      catchError(err => { throw err; })
+    );
   }
-  addPrescription(data: Record<string, unknown>): Observable<unknown> {
-    return this.http.post(`${this.base}/prescriptions/`, data);
-  }
-  addConsultation(data: Record<string, unknown>): Observable<unknown> {
-    return this.http.post(`${this.base}/consultations/`, data);
-  }
-  getDoctors(): Observable<unknown[]> {
-    return this.http.get<unknown[]>(`${this.base}/doctors/`);
+
+  // ─── Helpers ─────────────────────────────────────────────────
+
+  private getCurrentUserId(): string {
+    // Access from localStorage tokens set by auth service
+    try {
+      const tokens = JSON.parse(localStorage.getItem('vitacare_tokens') || '{}');
+      return tokens.user_id || '';
+    } catch { return ''; }
   }
 }

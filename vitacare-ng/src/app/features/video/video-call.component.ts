@@ -129,7 +129,7 @@ export class VideoCallComponent implements OnInit, AfterViewInit, OnDestroy {
   callDuration = '00:00';
   isDoctorRoom = false; // Doctor is always the room host
   
-  private roomDoctorId!: number;
+  private roomDoctorId!: string;
   private timerInt: any;
   private seconds = 0;
   private subs = new Subscription();
@@ -144,7 +144,7 @@ export class VideoCallComponent implements OnInit, AfterViewInit, OnDestroy {
     this.route.paramMap.subscribe(params => {
        const idParam = params.get('id');
        if (idParam) {
-          this.roomDoctorId = Number(idParam);
+          this.roomDoctorId = idParam;
        }
     });
 

@@ -29,7 +29,7 @@ import { AuthService } from '../../core/services/auth.service';
             </svg>
           </div>
           <h1>Forgot Password?</h1>
-          <p>Enter your email — we'll send you a reset code</p>
+          <p>Enter your email — we'll send you a reset link</p>
         </div>
 
         <app-premium-card class="card-animate">
@@ -46,11 +46,9 @@ import { AuthService } from '../../core/services/auth.service';
               </svg>
             </div>
             <h3>Check Your Inbox</h3>
-            <p>We sent a 5-digit code to <strong>{{ email }}</strong></p>
-            <app-input-field label="Enter the code" placeholder="12345" (valueChange)="code = $event"></app-input-field>
-            <p *ngIf="error" class="field-error">{{ error }}</p>
-            <app-primary-button [fullWidth]="true" [loading]="loading" (onClick)="verifyCode()">Verify Code</app-primary-button>
-            <button class="resend-btn" (click)="step = 'email'">Resend code</button>
+            <p>We've sent a recovery link to <strong>{{ email }}</strong></p>
+            <p class="helper-text">Click the link in the email to set your new password.</p>
+            <button class="resend-btn" (click)="step = 'email'">Use a different email</button>
           </div>
 
           <div *ngIf="step === 'reset'">
@@ -110,7 +108,13 @@ export class ForgotPasswordComponent {
   step: 'email' | 'code' | 'reset' | 'success' = 'email';
   loading = false; error = '';
 
-  constructor(private router: Router, private auth: AuthService) {}
+  constructor(private router: Router, private auth: AuthService) {
+    // Listen for the redirect back from Supabase recovery email
+    const url = new URL(window.location.href);
+    if (url.searchParams.get('step') === 'reset' || window.location.hash.includes('access_token')) {
+      this.step = 'reset';
+    }
+  }
 
   goBack() { this.router.navigate(['/patient-login']); }
 
@@ -119,31 +123,18 @@ export class ForgotPasswordComponent {
     this.loading = true; this.error = '';
     this.auth.forgotPassword(this.email).subscribe({
       next: () => { this.loading = false; this.step = 'code'; },
-      error: (err: any) => { this.loading = false; this.error = err?.error?.detail || 'User not found'; }
-    });
-  }
-
-  verifyCode() {
-    if (!this.code) { this.error = 'Please enter the code'; return; }
-    this.loading = true; this.error = '';
-    this.auth.verifyCode(this.email, this.code).subscribe({
-      next: () => { this.loading = false; this.step = 'reset'; },
-      error: (err: any) => { this.loading = false; this.error = err?.error?.error || 'Invalid code'; }
+      error: (err: any) => { this.loading = false; this.error = err?.message || 'Error sending link'; }
     });
   }
 
   resetPassword() {
-    if (!this.newPassword || !this.confirmPassword) { this.error = 'All fields required'; return; }
+    if (!this.newPassword) { this.error = 'Please enter a new password'; return; }
     if (this.newPassword !== this.confirmPassword) { this.error = 'Passwords do not match'; return; }
-    
+
     this.loading = true; this.error = '';
-    this.auth.resetPassword({
-      email: this.email,
-      new_password: this.newPassword,
-      confirm_password: this.confirmPassword
-    }).subscribe({
+    this.auth.updatePassword(this.newPassword).subscribe({
       next: () => { this.loading = false; this.step = 'success'; },
-      error: (err: any) => { this.loading = false; this.error = err?.error?.detail || 'Failed to reset password'; }
+      error: (err: any) => { this.loading = false; this.error = err?.message || 'Failed to update password'; }
     });
   }
 }

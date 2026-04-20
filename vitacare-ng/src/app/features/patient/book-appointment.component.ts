@@ -103,9 +103,9 @@ export class BookAppointmentComponent implements OnInit {
       next: (d: any[]) => { this.doctors = d; this.loadingDoctors = false; },
       error: () => {
         this.doctors = [
-          { id: 1, name: 'Dr. Amahle Dlamini', specialization: 'Cardiologist' },
-          { id: 2, name: 'Dr. James Mokoena', specialization: 'General Practitioner' },
-          { id: 3, name: 'Dr. Priya Naidoo', specialization: 'Dermatologist' },
+          { id: '1', name: 'Dr. Amahle Dlamini', specialization: 'Cardiologist' },
+          { id: '2', name: 'Dr. James Mokoena', specialization: 'General Practitioner' },
+          { id: '3', name: 'Dr. Priya Naidoo', specialization: 'Dermatologist' },
         ];
         this.loadingDoctors = false;
       }
@@ -119,7 +119,7 @@ export class BookAppointmentComponent implements OnInit {
   book() {
     if (!this.date || !this.time) { this.error = 'Please select a date and time'; return; }
     this.loading = true; this.error = '';
-    this.api.bookAppointment({ doctor: this.selectedDoctor.id, date: this.date, time: this.time, reason: this.reason }).subscribe({
+    this.api.bookAppointment({ doctor_id: this.selectedDoctor.id, date: this.date, time: this.time, reason: this.reason }).subscribe({
       next: () => { this.loading = false; this.success = true; setTimeout(() => this.goBack(), 1500); },
       error: () => { this.loading = false; this.success = true; setTimeout(() => this.goBack(), 1500); }
     });

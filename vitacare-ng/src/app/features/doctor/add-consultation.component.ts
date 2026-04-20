@@ -6,6 +6,7 @@ import { ApiService } from '../../core/services/api.service';
 import { PremiumCardComponent } from '../../shared/components/premium-card.component';
 import { InputFieldComponent } from '../../shared/components/input-field.component';
 import { PrimaryButtonComponent } from '../../shared/components/primary-button.component';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-add-consultation',
@@ -76,13 +77,19 @@ export class AddConsultationComponent {
   patientId = ''; diagnosis = ''; notes = ''; date = ''; followUp = '';
   loading = false; error = ''; success = false;
 
-  constructor(private router: Router, private api: ApiService) {}
+  constructor(private router: Router, private api: ApiService, private auth: AuthService) {}
   goBack() { this.router.navigate(['/doctor-home']); }
 
   save() {
     if (!this.diagnosis || !this.date) { this.error = 'Diagnosis and date are required'; return; }
     this.loading = true; this.error = '';
-    this.api.addConsultation({ patient: this.patientId, diagnosis: this.diagnosis, notes: this.notes, date: this.date }).subscribe({
+    this.api.addConsultation({ 
+      doctor_id: this.auth.userId || '', 
+      patient_id: this.patientId, 
+      summary: this.diagnosis, 
+      follow_up: this.notes, 
+      appointment_id: undefined 
+    }).subscribe({
       next: () => { this.loading = false; this.success = true; setTimeout(() => this.goBack(), 1200); },
       error: () => { this.loading = false; this.success = true; setTimeout(() => this.goBack(), 1200); }
     });

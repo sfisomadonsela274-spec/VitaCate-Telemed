@@ -156,7 +156,7 @@ export class DoctorChatComponent implements OnInit, OnDestroy {
   chatStatus$; 
   isPeerTyping = false;
   isVideoActive = false;
-  myUserId: number | null = null;
+  myUserId: string | null = null;
   
   private subs = new Subscription();
   private typingTimerSub?: Subscription;

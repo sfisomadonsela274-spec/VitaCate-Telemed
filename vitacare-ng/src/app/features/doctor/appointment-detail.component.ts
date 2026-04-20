@@ -112,11 +112,11 @@ export class AppointmentDetailComponent implements OnInit {
 
   ngOnInit() {
     // In a real app we'd fetch by ID. Here we'll use demo data if none found.
-    this.api.getDoctorAppointments().subscribe({
+    this.api.getDoctorAppointments('1').subscribe({
       next: (data: any[]) => {
         // Just pick the first one for demo purposes if no ID found
         this.appointment = data?.[0] || {
-           id: 1, patient_name: 'Sarah Johnson', date: 'Today', time: '10:00 AM', status: 'scheduled', reason: 'High blood pressure follow-up. Patient reports occasional dizziness in the morning.'
+           id: '1', patient_name: 'Sarah Johnson', date: 'Today', time: '10:00 AM', status: 'scheduled', reason: 'High blood pressure follow-up. Patient reports occasional dizziness in the morning.'
         };
       },
       error: () => {

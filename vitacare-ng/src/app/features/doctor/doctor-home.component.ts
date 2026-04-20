@@ -5,7 +5,7 @@ import { ApiService } from '../../core/services/api.service';
 import { AuthService } from '../../core/services/auth.service';
 import { PremiumCardComponent } from '../../shared/components/premium-card.component';
 
-interface Appointment { id: number; patient_name: string; date: string; status: string; }
+interface Appointment { id: string; patient_name: string; date: string; status: string; }
 
 @Component({
   selector: 'app-doctor-home',
@@ -249,13 +249,13 @@ export class DoctorHomeComponent implements OnInit {
   }
 
   loadAppointments() {
-    this.api.getDoctorAppointments().subscribe({
+    this.api.getDoctorAppointments('1').subscribe({
       next: (data: any[]) => { this.appointments = data || []; },
       error: () => {
         this.appointments = [
-          { id: 1, patient_name: 'Sarah Johnson', date: '10:00 AM', status: 'scheduled' },
-          { id: 2, patient_name: 'Michael Chen', date: '11:30 AM', status: 'scheduled' },
-          { id: 3, patient_name: 'Amara Ndlovu', date: '2:00 PM', status: 'pending' },
+          { id: '1', patient_name: 'Sarah Johnson', date: '10:00 AM', status: 'scheduled' },
+          { id: '2', patient_name: 'Michael Chen', date: '11:30 AM', status: 'scheduled' },
+          { id: '3', patient_name: 'Amara Ndlovu', date: '2:00 PM', status: 'pending' },
         ];
       }
     });

@@ -1,20 +1,19 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
-import { AuthService } from './auth.service';
+import { supabase } from '../supabase';
+import { RealtimeChannel } from '@supabase/supabase-js';
 
 @Injectable({ providedIn: 'root' })
 export class VideoCallService {
-  private socket: WebSocket | null = null;
+  private channel: RealtimeChannel | null = null;
   public peerConnection: RTCPeerConnection | null = null;
-  
+
   public remoteStream$ = new Subject<MediaStream>();
   public localStream$ = new Subject<MediaStream>();
-  public peerJoined$ = new Subject<{user: string, role: string}>();
-  public peerLeft$ = new Subject<{user: string}>();
+  public peerJoined$ = new Subject<{ user: string; role: string }>();
+  public peerLeft$ = new Subject<{ user: string }>();
 
   private localStream: MediaStream | null = null;
-
-  constructor(private auth: AuthService) {}
 
   async startLocalVideo(): Promise<MediaStream> {
     try {
@@ -22,36 +21,44 @@ export class VideoCallService {
       this.localStream$.next(this.localStream);
       return this.localStream;
     } catch (err) {
-      console.error('Failed to get local stream', err);
+      console.error('[VideoCallService] Failed to get local stream', err);
       throw err;
     }
   }
 
-  connect(doctorId: number) {
-    const token = this.auth.accessToken;
-    if (!token) return;
-    
-    this.socket = new WebSocket(`ws://localhost:8000/ws/video/${doctorId}/?token=${token}`);
+  connect(doctorId: string) {
+    this.disconnect();
 
-    this.socket.onopen = () => {
-      this.socket?.send(JSON.stringify({ type: 'join' }));
-    };
+    this.channel = supabase.channel(`video_${doctorId}`, {
+      config: { broadcast: { self: false } }
+    });
 
-    this.socket.onmessage = async (event) => {
-      const data = JSON.parse(event.data);
-      if (data.type === 'peer_joined') {
-        this.peerJoined$.next({user: data.user, role: data.role});
-        // We can wait for the other peer to be ready before offering
-      } else if (data.type === 'peer_left' || data.type === 'peer_disconnected') {
-        this.peerLeft$.next({user: data.user});
-      } else if (data.type === 'offer') {
-        await this.handleOffer(data.data);
-      } else if (data.type === 'answer') {
-        await this.handleAnswer(data.data);
-      } else if (data.type === 'ice_candidate') {
-        await this.handleIceCandidate(data.data);
-      }
-    };
+    this.channel.on('broadcast', { event: 'peer_joined' }, (p) =>
+      this.peerJoined$.next(p['payload'] as { user: string; role: string })
+    );
+    this.channel.on('broadcast', { event: 'peer_left' }, (p) =>
+      this.peerLeft$.next(p['payload'] as { user: string })
+    );
+    this.channel.on('broadcast', { event: 'peer_disconnected' }, (p) =>
+      this.peerLeft$.next(p['payload'] as { user: string })
+    );
+    this.channel.on('broadcast', { event: 'offer' }, (p) =>
+      this.handleOffer(p['payload'].data)
+    );
+    this.channel.on('broadcast', { event: 'answer' }, (p) =>
+      this.handleAnswer(p['payload'].data)
+    );
+    this.channel.on('broadcast', { event: 'ice_candidate' }, (p) =>
+      this.handleIceCandidate(p['payload'].data)
+    );
+
+    this.channel.subscribe(() => {
+      this.channel?.send({
+        type: 'broadcast',
+        event: 'join',
+        payload: { user: localStorage.getItem('vitacare_user') ?? 'unknown' }
+      });
+    });
   }
 
   private initPeerConnection() {
@@ -62,9 +69,9 @@ export class VideoCallService {
     });
 
     if (this.localStream) {
-      this.localStream.getTracks().forEach(track => {
-        this.peerConnection?.addTrack(track, this.localStream!);
-      });
+      this.localStream.getTracks().forEach(track =>
+        this.peerConnection!.addTrack(track, this.localStream!)
+      );
     }
 
     this.peerConnection.ontrack = (event) => {
@@ -74,24 +81,25 @@ export class VideoCallService {
     };
 
     this.peerConnection.onicecandidate = (event) => {
-      if (event.candidate && this.socket && this.socket.readyState === WebSocket.OPEN) {
-        this.socket.send(JSON.stringify({
-          type: 'ice_candidate',
-          data: event.candidate
-        }));
+      if (event.candidate) {
+        this.channel?.send({
+          type: 'broadcast',
+          event: 'ice_candidate',
+          payload: { data: event.candidate }
+        });
       }
     };
   }
 
   async createOffer() {
-    if (!this.socket || this.socket.readyState !== WebSocket.OPEN) return;
     this.initPeerConnection();
     const offer = await this.peerConnection!.createOffer();
     await this.peerConnection!.setLocalDescription(offer);
-    this.socket.send(JSON.stringify({
-      type: 'offer',
-      data: offer
-    }));
+    this.channel?.send({
+      type: 'broadcast',
+      event: 'offer',
+      payload: { data: offer }
+    });
   }
 
   async handleOffer(offer: RTCSessionDescriptionInit) {
@@ -99,12 +107,11 @@ export class VideoCallService {
     await this.peerConnection!.setRemoteDescription(new RTCSessionDescription(offer));
     const answer = await this.peerConnection!.createAnswer();
     await this.peerConnection!.setLocalDescription(answer);
-    if (this.socket && this.socket.readyState === WebSocket.OPEN) {
-      this.socket.send(JSON.stringify({
-        type: 'answer',
-        data: answer
-      }));
-    }
+    this.channel?.send({
+      type: 'broadcast',
+      event: 'answer',
+      payload: { data: answer }
+    });
   }
 
   async handleAnswer(answer: RTCSessionDescriptionInit) {
@@ -128,10 +135,10 @@ export class VideoCallService {
       this.peerConnection.close();
       this.peerConnection = null;
     }
-    if (this.socket) {
-      this.socket.send(JSON.stringify({ type: 'leave' }));
-      this.socket.close();
-      this.socket = null;
+    if (this.channel) {
+      this.channel.send({ type: 'broadcast', event: 'leave', payload: {} });
+      supabase.removeChannel(this.channel);
+      this.channel = null;
     }
   }
 }

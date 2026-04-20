@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, interval, of } from 'rxjs';
-import { map, switchMap, catchError } from 'rxjs/operators';
-import { CONFIG } from '../config';
+import { Observable, from, of, Subject, interval } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
+import { supabase } from '../supabase';
 
 export interface VitalRecord {
-  id?: number;
-  patient?: number;
+  id?: string;
+  patient_id: string;
+  recorded_by?: string;
   heart_rate: number;
   spo2: number;
   temperature: number;
@@ -17,18 +17,52 @@ export interface VitalRecord {
 
 @Injectable({ providedIn: 'root' })
 export class VitalsService {
-  private base = `${CONFIG.API_BASE}/medical/vitals`;
-
-  constructor(private http: HttpClient) {}
+  constructor() {}
 
   getVitals(): Observable<VitalRecord[]> {
-    return this.http.get<VitalRecord[]>(`${this.base}/`).pipe(
+    return from(
+      supabase
+        .from('vitals')
+        .select('*')
+        .order('timestamp', { ascending: false })
+    ).pipe(
+      map(r => (r.data as VitalRecord[]) ?? []),
       catchError(() => of([]))
     );
   }
 
-  recordVitals(data: Partial<VitalRecord>): Observable<VitalRecord> {
-    return this.http.post<VitalRecord>(`${this.base}/`, data);
+  recordVitals(data: Partial<VitalRecord>): Observable<any> {
+    return from(
+      supabase
+        .from('vitals')
+        .insert(data)
+        .select()
+        .single()
+    ).pipe(
+      map(r => r.data),
+      catchError(err => {
+        console.error('[VitalsService] Error recording vitals:', err);
+        throw err;
+      })
+    );
+  }
+
+  /** Subscribes to real-time updates for a specific patient's vitals */
+  subscribeToVitals(patientId: string): Observable<VitalRecord> {
+    const subject = new Subject<VitalRecord>();
+
+    const channel = supabase
+      .channel(`public:vitals:patient_id=eq.${patientId}`)
+      .on(
+        'postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'vitals', filter: `patient_id=eq.${patientId}` },
+        (payload) => {
+          subject.next(payload.new as VitalRecord);
+        }
+      )
+      .subscribe();
+
+    return subject.asObservable();
   }
 
   /**
@@ -36,7 +70,8 @@ export class VitalsService {
    * Fluctuates slightly to make the bedside dashboard feel 'alive'
    */
   getSimulationStream(): Observable<VitalRecord> {
-    const base = {
+    const base: VitalRecord = {
+       patient_id: '',
        heart_rate: 72,
        spo2: 98,
        temperature: 36.6,

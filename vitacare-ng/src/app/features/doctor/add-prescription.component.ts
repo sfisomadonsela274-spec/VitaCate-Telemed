@@ -7,6 +7,7 @@ import { PremiumCardComponent } from '../../shared/components/premium-card.compo
 import { InputFieldComponent } from '../../shared/components/input-field.component';
 import { PrimaryButtonComponent } from '../../shared/components/primary-button.component';
 import { SignaturePadComponent } from '../../shared/components/signature-pad.component';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-add-prescription',
@@ -87,26 +88,25 @@ export class AddPrescriptionComponent {
   signature: string | null = null;
   loading = false; error = ''; success = false;
 
-  constructor(private router: Router, private api: ApiService) {}
+  constructor(private router: Router, private api: ApiService, private auth: AuthService) {}
 
   goBack() { this.router.navigate(['/doctor-home']); }
 
   onSignatureChange(sig: string | null) { this.signature = sig; }
 
   save() {
-    if (!this.medication || !this.signature) { 
-      this.error = 'Medication and Digital Authorization (Signature) are required'; 
-      return; 
+    if (!this.medication || !this.signature) {
+      this.error = 'Medication and Digital Authorization (Signature) are required';
+      return;
     }
     this.loading = true; this.error = '';
-    
+
     this.api.addPrescription({
-      patient_id: this.patientId, // Backend expects patient_id
-      doctor_email: 'dr.doctor@vitacare.com', // Demo email
+      doctor_id: this.auth.userId || '',
+      patient_id: this.patientId,
       medication: this.medication,
       dosage: this.dosage,
-      notes: this.notes,
-      signature_data: this.signature
+      notes: this.notes
     }).subscribe({
       next: () => {
         this.loading = false;
@@ -114,7 +114,6 @@ export class AddPrescriptionComponent {
         setTimeout(() => this.goBack(), 1500);
       },
       error: () => {
-        // demo fallback
         this.loading = false;
         this.success = true;
         setTimeout(() => this.goBack(), 1500);

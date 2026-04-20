@@ -104,14 +104,14 @@ export class DoctorAppointmentsComponent implements OnInit {
 
   load() {
     this.loading = true;
-    this.api.getDoctorAppointments().subscribe({
+    this.api.getDoctorAppointments('1').subscribe({
       next: (d: any[]) => { this.appointments = d; this.applyFilter(); this.loading = false; },
       error: () => {
         this.appointments = [
-          { id: 1, patient_name: 'Sarah Johnson', date: 'Today', time: '10:00 AM', status: 'scheduled', reason: 'Annual checkup' },
-          { id: 2, patient_name: 'Michael Chen', date: 'Today', time: '11:30 AM', status: 'scheduled', reason: 'Follow-up visit' },
-          { id: 3, patient_name: 'Amara Ndlovu', date: 'Yesterday', time: '2:00 PM', status: 'completed', reason: 'Chest pain evaluation' },
-          { id: 4, patient_name: 'Thabo Sithole', date: 'Tomorrow', time: '9:00 AM', status: 'pending', reason: 'Referral consultation' },
+          { id: '1', patient_name: 'Sarah Johnson', date: 'Today', time: '10:00 AM', status: 'scheduled', reason: 'Annual checkup' },
+          { id: '2', patient_name: 'Michael Chen', date: 'Today', time: '11:30 AM', status: 'scheduled', reason: 'Follow-up visit' },
+          { id: '3', patient_name: 'Amara Ndlovu', date: 'Yesterday', time: '2:00 PM', status: 'completed', reason: 'Chest pain evaluation' },
+          { id: '4', patient_name: 'Thabo Sithole', date: 'Tomorrow', time: '9:00 AM', status: 'pending', reason: 'Referral consultation' },
         ];
         this.applyFilter(); this.loading = false;
       }

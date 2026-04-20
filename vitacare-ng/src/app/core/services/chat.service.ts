@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Subject, ReplaySubject, BehaviorSubject } from 'rxjs';
-import { AuthService } from './auth.service';
-import { CONFIG } from '../config';
+import { supabase } from '../supabase';
+import { RealtimeChannel } from '@supabase/supabase-js';
 
 export interface ChatMessage {
-  id?: number;
-  sender_id: number;
-  receiver_id: number;
+  id?: string;
+  sender_id: string;
+  receiver_id: string;
   message: string;
   message_type?: 'text' | 'image';
   media_payload?: string;
@@ -15,7 +15,7 @@ export interface ChatMessage {
 }
 
 export interface TypingStatus {
-  sender_id: number;
+  sender_id: string;
   is_typing: boolean;
 }
 
@@ -23,133 +23,98 @@ export type ConnectionStatus = 'connecting' | 'open' | 'closed' | 'error';
 
 @Injectable({ providedIn: 'root' })
 export class ChatService {
-  private socket: WebSocket | null = null;
-  private currentUserId: number | null = null;
-  private reconnectAttempts = 0;
-  private isManualDisconnect = false;
-
+  private channel: RealtimeChannel | null = null;
+  private currentUserId: string | null = null;
   public messages$ = new Subject<ChatMessage>();
   public history$ = new ReplaySubject<ChatMessage[]>(1);
   public status$ = new BehaviorSubject<ConnectionStatus>('closed');
   public typing$ = new Subject<TypingStatus>();
 
-  constructor(private auth: AuthService) {}
+  connect(userId: string) {
+    if (this.currentUserId === userId && this.channel) return;
 
-  connect(userId: number) {
-    if (this.currentUserId === userId && this.socket && (this.socket.readyState === WebSocket.OPEN || this.socket.readyState === WebSocket.CONNECTING)) {
-      return;
-    }
-
+    this.disconnect();
     this.currentUserId = userId;
-    this.isManualDisconnect = false;
-    
-    if (this.socket) {
-      this.socket.close();
-    }
-    
-    const token = this.auth.accessToken;
-    if (!token) {
-        this.status$.next('error');
-        return;
-    }
-    
     this.status$.next('connecting');
-    
-    try {
-      this.socket = new WebSocket(`${CONFIG.WS_BASE}/chat/${userId}/?token=${token}`);
 
-      this.socket.onopen = () => {
-        this.status$.next('open');
-        this.reconnectAttempts = 0;
-      };
+    this.channel = supabase.channel(`inbox_${userId}`, {
+      config: { broadcast: { self: true } }
+    });
 
-      this.socket.onmessage = (event) => {
-        try {
-          const data = JSON.parse(event.data);
-          if (data.type === 'message') {
-            this.messages$.next(data);
-          } else if (data.type === 'message_history') {
-            this.history$.next(data.messages);
-          } else if (data.type === 'typing') {
-            this.typing$.next({ sender_id: data.sender_id, is_typing: data.is_typing });
-          }
-        } catch (e) {
-          console.error('[ChatService] Error parsing socket data', e);
-        }
-      };
+    this.channel.on('broadcast', { event: 'message' }, (p) => {
+      this.messages$.next(p['payload'] as ChatMessage);
+    });
 
-      this.socket.onclose = (event) => {
-        this.status$.next('closed');
-        if (!this.isManualDisconnect) {
-          this.attemptReconnect();
-        }
-      };
+    this.channel.on('broadcast', { event: 'typing' }, (p) => {
+      this.typing$.next(p['payload'] as TypingStatus);
+    });
 
-      this.socket.onerror = () => {
-        this.status$.next('error');
-      };
-    } catch (err) {
-      this.status$.next('error');
-      this.attemptReconnect();
+    this.channel.subscribe((status) => {
+      this.status$.next(status === 'SUBSCRIBED' ? 'open' : 'closed');
+    });
+  }
+
+  async getHistory(peerId: string) {
+    const { data, error } = await supabase
+      .from('chat_messages')
+      .select('*')
+      .or(`sender_id.eq.${this.currentUserId},receiver_id.eq.${this.currentUserId}`)
+      .or(`sender_id.eq.${peerId},receiver_id.eq.${peerId}`)
+      .order('timestamp', { ascending: true });
+
+    if (!error && data) {
+      this.history$.next(data as ChatMessage[]);
     }
   }
 
-  private attemptReconnect() {
-    if (this.reconnectAttempts >= CONFIG.MAX_RECONNECT_ATTEMPTS) return;
+  sendMessage(message: string, receiverId: string, messageType: 'text' | 'image' = 'text', mediaPayload?: string) {
+    const payload = {
+      type: 'message',
+      sender_id: this.currentUserId,
+      receiver_id: receiverId,
+      message,
+      message_type: messageType,
+      media_payload: mediaPayload,
+      timestamp: new Date().toISOString()
+    };
 
-    this.reconnectAttempts++;
-    const delay = Math.min(1000 * Math.pow(2, this.reconnectAttempts), 10000);
-    
-    setTimeout(() => {
-      if (this.currentUserId && !this.isManualDisconnect) {
-        const uid = this.currentUserId;
-        this.currentUserId = null; 
-        this.connect(uid);
-      }
-    }, delay);
+    this.channel?.send({
+      type: 'broadcast',
+      event: 'message',
+      payload
+    });
   }
 
-  getHistory(peerId: number) {
-    if (this.socket && this.socket.readyState === WebSocket.OPEN) {
-      this.socket.send(JSON.stringify({ type: 'get_messages', peer_id: peerId }));
-    }
+  sendTypingStatus(isTyping: boolean, receiverId: string) {
+    this.channel?.send({
+      type: 'broadcast',
+      event: 'typing',
+      payload: { sender_id: this.currentUserId, receiver_id: receiverId, is_typing: isTyping }
+    });
   }
 
-  sendMessage(message: string, receiverId: number, messageType: 'text' | 'image' = 'text', mediaPayload?: string) {
-    if (this.socket && this.socket.readyState === WebSocket.OPEN) {
-      this.socket.send(JSON.stringify({ 
-        type: 'message', 
-        message, 
-        receiver_id: receiverId,
-        message_type: messageType,
-        media_payload: mediaPayload
-      }));
-    }
-  }
+  async markAsRead(peerId: string) {
+    if (!this.currentUserId) return;
+    await supabase
+      .from('chat_messages')
+      .update({ is_read: true })
+      .eq('receiver_id', this.currentUserId)
+      .eq('sender_id', peerId)
+      .eq('is_read', false);
 
-  sendTypingStatus(isTyping: boolean, receiverId: number) {
-    if (this.socket && this.socket.readyState === WebSocket.OPEN) {
-      this.socket.send(JSON.stringify({
-        type: 'typing',
-        is_typing: isTyping,
-        receiver_id: receiverId
-      }));
-    }
-  }
-
-  markAsRead(peerId: number) {
-    if (this.socket && this.socket.readyState === WebSocket.OPEN) {
-      this.socket.send(JSON.stringify({ type: 'mark_read', peer_id: peerId }));
-    }
+    this.channel?.send({
+      type: 'broadcast',
+      event: 'mark_read',
+      payload: { sender_id: this.currentUserId, receiver_id: peerId }
+    });
   }
 
   disconnect() {
-    this.isManualDisconnect = true;
-    this.currentUserId = null;
-    if (this.socket) {
-      this.socket.close();
-      this.socket = null;
+    if (this.channel) {
+      supabase.removeChannel(this.channel);
+      this.channel = null;
     }
+    this.currentUserId = null;
     this.status$.next('closed');
   }
 }

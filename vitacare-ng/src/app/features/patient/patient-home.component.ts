@@ -265,11 +265,26 @@ export class PatientHomeComponent implements OnInit, OnDestroy {
   }
 
   startVitalsStream() {
+    // 1. Simulation for 'bedside feel'
     this.subs.add(this.vitalsService.getSimulationStream().subscribe(rec => {
       this.currentVitals = rec;
-      this.hrHistory = [...this.hrHistory.slice(-20), { x: rec.timestamp, y: rec.heart_rate }];
-      this.spo2History = [...this.spo2History.slice(-20), { x: rec.timestamp, y: rec.spo2 }];
+      this.updateHistory(rec);
     }));
+
+    // 2. Realtime subscription for actual records
+    const userId = this.auth.userId;
+    if (userId) {
+      this.subs.add(this.vitalsService.subscribeToVitals(userId).subscribe(rec => {
+        // Overlay real record on top of simulation
+        this.currentVitals = rec;
+        this.updateHistory(rec);
+      }));
+    }
+  }
+
+  private updateHistory(rec: VitalRecord) {
+    this.hrHistory = [...this.hrHistory.slice(-20), { x: rec.timestamp, y: rec.heart_rate }];
+    this.spo2History = [...this.spo2History.slice(-20), { x: rec.timestamp, y: rec.spo2 }];
   }
 
   loadAppointment() {
@@ -301,11 +316,11 @@ export class PatientHomeComponent implements OnInit, OnDestroy {
   }
 
   onScanResult(res: {bpm: number, spo2: number}) {
-    // Record it via the service
-    const record = {
+    const record: Partial<VitalRecord> = {
+      patient_id: this.auth.userId || '',
       heart_rate: res.bpm,
       spo2: res.spo2,
-      temperature: 36.6, // Default for simulation
+      temperature: 36.6,
       systolic: 120,
       diastolic: 80,
       timestamp: new Date().toISOString()
@@ -313,7 +328,6 @@ export class PatientHomeComponent implements OnInit, OnDestroy {
     
     this.vitalsService.recordVitals(record).subscribe(() => {
        alert('Vitals successfully recorded and sent to your clinical team.');
-       // The UI will update automatically because we are subscribed to the stats
     });
   }
 

@@ -21,13 +21,17 @@ DEBUG = os.environ.get("DEBUG", "True") == "True"
 ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
-    os.environ.get("FLY_APP_NAME", "") + ".fly.dev",
-    ".fly.dev",
-    # Cloudflare Workers
+    # Supabase hosted Django (when using Supabase as database + another host)
+    ".supabase.co",
+    ".retool.com",
+    # Cloudflare
     ".workers.dev",
     ".pages.dev",
-    # Railway
-    ".railway.app",
+    # Netlify
+    ".netlify.app",
+    ".netlify.com",
+    # Render
+    ".onrender.com",
     # Generic fallback for production
     "*",
 ]
@@ -98,10 +102,14 @@ WSGI_APPLICATION = "vitacare.wsgi.application"
 ASGI_APPLICATION = "vitacare.asgi.application"
 
 # Database
-# Use PostgreSQL on Render if DATABASE_URL is set, otherwise use SQLite
+# Use Supabase PostgreSQL when DATABASE_URL is set, otherwise SQLite for local dev
+# Supabase connection string format:
+# postgresql://postgres:[PASSWORD]@db.[PROJECT-REF].supabase.co:5432/postgres
 DATABASES = {
     "default": dj_database_url.config(
-        default="sqlite:///" + str(BASE_DIR / "vitacare_db.sqlite3"), conn_max_age=600
+        default="sqlite:///" + str(BASE_DIR / "vitacare_db.sqlite3"),
+        conn_max_age=600,
+        sslmode="require",  # Required for Supabase remote connection
     )
 }
 
