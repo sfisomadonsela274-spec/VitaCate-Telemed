@@ -1,4 +1,9 @@
 {
+  "name": "vitacare-root",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "npm install --prefix vitacare-ng && npm run build --prefix vitacare-ng"
+  },
   "dependencies": {
     "@supabase/supabase-js": "^2.104.0"
   }

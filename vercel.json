@@ -1,6 +1,7 @@
 {
   "version": 2,
   "public": true,
+  "outputDirectory": "vitacare-ng/dist/vitacare-ng/browser",
   "rewrites": [
     { "source": "/(.*)", "destination": "/index.html" }
   ]
