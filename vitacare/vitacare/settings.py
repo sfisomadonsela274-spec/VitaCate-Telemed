@@ -17,8 +17,8 @@ DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = [
     'localhost', '127.0.0.1',
-    os.environ.get('RENDER_EXTERNAL_HOSTNAME', ''),
-    '.render.com'
+    os.environ.get('FLY_APP_NAME', '') + '.fly.dev',
+    '.fly.dev'
 ]
 
 # Production Security

@@ -1,0 +1,10 @@
+{
+  "experimentalServices": {
+    "vitacare-django": {
+      "type": "web"
+    },
+    "vitacare-angular": {
+      "type": "web"
+    }
+  }
+}
