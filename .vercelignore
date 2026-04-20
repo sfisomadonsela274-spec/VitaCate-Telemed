@@ -7,7 +7,7 @@ vitacare/requirements.txt
 
 # Build artifacts
 vitacare-ng/.angular
-vitacare-ng/dist  # Angular builds on Vercel via buildCommand
+# vitacare-ng/dist is the Angular static SPA entrypoint
 
 # Python
 __pycache__

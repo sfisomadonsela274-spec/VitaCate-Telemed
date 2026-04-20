@@ -1,10 +1,15 @@
 {
   "experimentalServices": {
     "vitacare-django": {
-      "type": "web"
+      "type": "web",
+      "entrypoint": "vitacare/vitacare/wsgi.py",
+      "routePrefix": "/api",
+      "framework": "django"
     },
     "vitacare-angular": {
-      "type": "web"
+      "type": "web",
+      "entrypoint": "vitacare-ng/dist/vitacare-ng/browser",
+      "routePrefix": "/"
     }
   }
 }
