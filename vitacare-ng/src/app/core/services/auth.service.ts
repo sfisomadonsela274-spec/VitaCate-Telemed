@@ -5,6 +5,7 @@ import { BehaviorSubject, Observable, from, of } from 'rxjs';
 import { map, catchError, tap, switchMap } from 'rxjs/operators';
 import { supabase } from '../supabase';
 import { environment } from '../../../environments/environment';
+import { CONFIG } from '../config';
 
 export interface AuthTokens {
   access: string;
@@ -108,7 +109,7 @@ export class AuthService {
   /** Forgot password — sends reset email via Supabase */
   forgotPassword(email: string): Observable<any> {
     return from(supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/forgot-password?step=reset`
+      redirectTo: `${CONFIG.BASE_URL}forgot-password?step=reset`
     })).pipe(
       switchMap(({ error }) => {
         if (error) throw error;

@@ -1,4 +1,5 @@
 const isProd = !window.location.hostname.includes("localhost");
+const basePath = isProd ? '/VitaCate-Telemed/' : '/';
 
 export const CONFIG = {
   SUPABASE_URL: 'https://xyxgldkldowixuqnbopm.supabase.co',
@@ -6,4 +7,5 @@ export const CONFIG = {
   APP_NAME: "VitaCare",
   RECONNECT_INTERVAL: 3000,
   MAX_RECONNECT_ATTEMPTS: 5,
+  BASE_URL: `${window.location.origin}${basePath}`,
 };
