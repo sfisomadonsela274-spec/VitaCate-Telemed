@@ -1,5 +1,5 @@
 const isProd = !window.location.hostname.includes('localhost');
-const BASE_URL = isProd ? 'https://vitacare-api.fly.dev' : 'http://localhost:8000';
+const BASE_URL = isProd ? 'https://vitacare-api-production.up.railway.app' : 'http://localhost:8000';
 
 export const CONFIG = {
   API_BASE: `${BASE_URL}/api`,
